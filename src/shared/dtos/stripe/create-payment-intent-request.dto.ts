@@ -1,4 +1,4 @@
-import { GearTypes } from '../../../../../shared/calculations';
+import { GearTypes } from '../../../shared/calculations';
 
 export interface CreatePaymentIntentRequest {
   bikeId: number;

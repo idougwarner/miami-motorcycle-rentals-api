@@ -1,5 +1,5 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { CoverageTypes } from '../../../shared/calculations';
+import { CoverageTypes } from '../shared/calculations';
 import { BikeInsurancePlan } from '../modules/entity/bike-insurance-plan.entity';
 import { Bike } from '../modules/entity/bike.entity';
 import { InsuranceEnum } from '../shared/common';

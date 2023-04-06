@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
-import { GearTypes } from '../../../../../shared/calculations';
+import { GearTypes } from '../../../shared/calculations';
 
 export class CreateStripePaymentIntentRequestDto {
   @ApiProperty()

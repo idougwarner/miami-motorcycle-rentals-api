@@ -9,7 +9,7 @@ import * as moment from 'moment';
 import {
   BikePricing,
   CalculationResult,
-} from '../../../../shared/calculations';
+} from '../../shared/calculations';
 import { AppConstants } from '../../shared/common';
 import { BikeInsurancePlanService } from '../bike-insurance-plan/bike-insurance-plan.service';
 import { convertDateFormat } from '../../shared/utils/date-util';

@@ -10,7 +10,7 @@ import { isArray } from 'class-validator';
 import {
   CalculationResult,
   SALES_TAX_CONFIG,
-} from '../../../../shared/calculations';
+} from '../../shared/calculations';
 import { convertDateFormat } from '../../shared/utils/date-util';
 
 @Injectable()

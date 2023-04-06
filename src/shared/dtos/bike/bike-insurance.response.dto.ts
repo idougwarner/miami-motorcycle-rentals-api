@@ -1,7 +1,7 @@
 import { ApiResponseProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { BaseResponseDto } from '..';
-import { CoverageTypes } from '../../../../../shared/calculations';
+import { CoverageTypes } from '../../../shared/calculations';
 
 export class BikeInsuranceResponseDto extends BaseResponseDto {
   @ApiResponseProperty()

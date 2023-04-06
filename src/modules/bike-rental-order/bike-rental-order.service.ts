@@ -29,7 +29,7 @@ import {
   BikePricing,
   CalculationResult,
   gearPrices,
-} from '../../../../shared/calculations';
+} from '../../shared/calculations';
 import { BikeInsurancePlanService } from '../bike-insurance-plan/bike-insurance-plan.service';
 import { BikeInsurancePlan } from '../entity/bike-insurance-plan.entity';
 import { RequestedOrderDatesResponseDto } from '../../shared/dtos/bike-rental-order/requested-order-dates.dto';

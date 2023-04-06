@@ -1,7 +1,7 @@
 {
   "collection": "@nestjs/schematics",
   "sourceRoot": "src",
-  "entryFile": "backend/src/main",
+  "entryFile": "main",
   "compilerOptions": {
     "assets": [
       "email-templates/**/*",

@@ -8,7 +8,7 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { CoverageTypes } from '../../../../../shared/calculations';
+import { CoverageTypes } from '../../../shared/calculations';
 
 export class UpdateBikeRentalRequest {
   @ApiProperty({ example: '2022-01-31' })
