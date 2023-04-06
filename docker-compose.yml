@@ -1,0 +1,16 @@
+version: '3.4'
+services:
+  mysql_crossrail:
+    platform: linux/x86_64
+    restart: unless-stopped
+    container_name: mysql_miami
+    image: mysql
+    environment:
+      MYSQL_DATABASE: miami-dev
+      MYSQL_ROOT_PASSWORD: toor
+    ports:
+      - '3306:3306'
+    deploy:
+      resources:
+        limits:
+          memory: 1gb
