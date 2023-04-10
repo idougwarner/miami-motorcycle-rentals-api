@@ -492,6 +492,18 @@ export class AddInsuracePlans1670017290712 implements MigrationInterface {
       const bike = new Bike();
       const bikeId = Number(id);
       bike.wpBikeId = bikeId;
+      bike.seoTitle ='';
+      bike.seoDescription = '';
+      bike.name = '';
+      bike.slug = '';
+      bike.description = '';
+      bike.model = '';
+      bike.regluar_price = 0;
+      bike.discount_price = 0;
+      bike.distance_included = '';
+      bike.highlights = '';
+      bike.features = '';
+      bike.extras = '';
 
       const insuranceList: BikeInsurancePlan[] = [];
 
@@ -636,7 +648,7 @@ export class AddInsuracePlans1670017290712 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`Delete from bike_insurance_plan`);
-    await queryRunner.query(`Delete from bike`);
+    await queryRunner.query(`Delete from bike_insurance_plans`);
+    await queryRunner.query(`Delete from bikes`);
   }
 }

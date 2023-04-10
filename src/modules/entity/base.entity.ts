@@ -12,8 +12,8 @@ export abstract class BikeRentalBase extends BaseEntity {
   id: number;
 
   @CreateDateColumn()
-  created: Date;
+  created_at: Date;
 
   @UpdateDateColumn()
-  updated: Date;
+  updated_at: Date;
 }

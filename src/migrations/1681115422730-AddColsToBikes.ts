@@ -21,7 +21,7 @@ export class AddColsToBikes1681115422730 implements MigrationInterface {
           ADD COLUMN features varchar(255) NOT NULL,
           ADD COLUMN extras varchar(255) NOT NULL;`,
       );
-      await queryRunner.query(`ALTER TABLE bikes DROP COLUMN wp_bike_id;`);
+      // await queryRunner.query(`ALTER TABLE bikes DROP COLUMN wp_bike_id;`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
@@ -43,7 +43,7 @@ export class AddColsToBikes1681115422730 implements MigrationInterface {
           DROP COLUMN features,
           DROP COLUMN extras;
       `);
-      await queryRunner.query(`ALTER TABLE bikes ADD COLUMN wp_bike_id int NOT NULL;`);
+      // await queryRunner.query(`ALTER TABLE bikes ADD COLUMN wp_bike_id int NOT NULL;`);
     }
 
 }

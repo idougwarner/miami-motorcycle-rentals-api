@@ -4,7 +4,7 @@ import { InsuranceEnum } from '../../shared/common';
 import { BikeRentalBase } from './base.entity';
 import { Bike } from './bike.entity';
 
-@Entity({ name: 'bike_insurance_plan' })
+@Entity({ name: 'bike_insurance_plans' })
 export class BikeInsurancePlan extends BikeRentalBase {
   @Column({
     nullable: false,
