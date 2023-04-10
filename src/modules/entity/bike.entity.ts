@@ -1,6 +1,10 @@
-import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BikeRentalBase } from './base.entity';
 import { BikeInsurancePlan } from './bike-insurance-plan.entity';
+import { MediaItem } from './media-item.entity';
+import { BikeType } from './bike-type.entity';
+import { BikeMediaItem } from './bike-media-item.entity';
+import { BikeBrand } from './bike-brands.entity';
 
 @Entity({ name: 'bikes' })
 export class Bike extends BikeRentalBase {
@@ -50,19 +54,19 @@ export class Bike extends BikeRentalBase {
     nullable: false,
     name: 'regluar_price',
   })
-  regluar_price: number;
+  regluarPrice: number;
 
   @Column({
     nullable: false,
     name: 'discount_price',
   })
-  discount_price: number;
+  discountPrice: number;
 
   @Column({
     nullable: false,
     name: 'distance_included',
   })
-  distance_included: string;
+  distanceIncluded: string;
 
   @Column({
     nullable: false,
@@ -86,4 +90,21 @@ export class Bike extends BikeRentalBase {
     cascade: ['insert', 'update', 'remove'],
   })
   insurances?: BikeInsurancePlan[];
+
+  @OneToMany(() => BikeMediaItem, (bikeMediaItem) => bikeMediaItem.bike, {
+    cascade: ['insert', 'update', 'remove'],
+  })
+  mediaItems?: BikeMediaItem[];
+
+  @ManyToOne(() => MediaItem, (mediaItem) => mediaItem.bikes, { nullable: true })
+  @JoinColumn({ name: 'featured_media_item_id', referencedColumnName: 'id' })
+  featuredMediaItem?: BikeType;
+
+  @ManyToOne(() => BikeType, (bikeType) => bikeType.bikes, { nullable: true })
+  @JoinColumn({ name: 'type_id', referencedColumnName: 'id' })
+  type?: BikeType;
+
+  @ManyToOne(() => BikeBrand, (bikeBrand) => bikeBrand.bikes, { nullable: true })
+  @JoinColumn({ name: 'type_id', referencedColumnName: 'id' })
+  brand?: BikeBrand;
 }

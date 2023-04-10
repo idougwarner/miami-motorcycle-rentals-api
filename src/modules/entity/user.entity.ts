@@ -4,7 +4,7 @@ import { generateVerificationCode } from '../../shared/utils';
 import { BikeRentalBase } from './base.entity';
 import { BikeRentalOrder } from './bike-rental-order.entity';
 
-@Entity({ name: 'user' })
+@Entity({ name: 'users' })
 export class User extends BikeRentalBase {
   @Column({ length: 80, name: 'first_name', nullable: false })
   firstName: string;

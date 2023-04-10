@@ -498,9 +498,9 @@ export class AddInsuracePlans1670017290712 implements MigrationInterface {
       bike.slug = '';
       bike.description = '';
       bike.model = '';
-      bike.regluar_price = 0;
-      bike.discount_price = 0;
-      bike.distance_included = '';
+      bike.regluarPrice = 0;
+      bike.discountPrice = 0;
+      bike.distanceIncluded = '';
       bike.highlights = '';
       bike.features = '';
       bike.extras = '';
