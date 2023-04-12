@@ -11,8 +11,8 @@ export class BikeBrand extends BikeRentalBase {
   @Column({ type: 'varchar', length: 100 })
   slug: string;
 
-  /* @Column({ type: 'int' })
-  mediaItemId: number; */
+  @Column({ type: 'int', name: 'media_item_id' })
+  mediaItemId: number;
 
   @Column({ type: 'varchar', length: 255 })
   revision: string;

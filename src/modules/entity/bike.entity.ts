@@ -94,11 +94,11 @@ export class Bike extends BikeRentalBase {
   @OneToMany(() => BikeMediaItem, (bikeMediaItem) => bikeMediaItem.bike, {
     cascade: ['insert', 'update', 'remove'],
   })
-  mediaItems?: BikeMediaItem[];
+  bikeMediaItems?: BikeMediaItem[];
 
   @ManyToOne(() => MediaItem, (mediaItem) => mediaItem.bikes, { nullable: true })
   @JoinColumn({ name: 'featured_media_item_id', referencedColumnName: 'id' })
-  featuredMediaItem?: BikeType;
+  featuredMediaItem?: MediaItem;
 
   @ManyToOne(() => BikeType, (bikeType) => bikeType.bikes, { nullable: true })
   @JoinColumn({ name: 'type_id', referencedColumnName: 'id' })

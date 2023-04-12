@@ -67,7 +67,7 @@ export class MediaItem extends BikeRentalBase {
   @OneToMany(() => BikeBrand, (bikeBrand) => bikeBrand.mediaItem)
   bikeBrands: BikeBrand[]
 
-  @OneToMany(() => Bike, (bike) => bike.mediaItems)
+  @OneToMany(() => Bike, (bike) => bike.bikeMediaItems)
   bikes: Bike[]
 
   @OneToMany(() => BikeMediaItem, (bikeMediaItem) => bikeMediaItem.mediaItem)
