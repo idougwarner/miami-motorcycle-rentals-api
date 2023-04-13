@@ -25,7 +25,7 @@
     "migration:revert": "npm run typeorm:cli -- migration:revert -c migration",
     "seed:generate": "npm run typeorm:cli -- migration:create -c seed -n ",
     "seed:run": "npm run typeorm:cli -- migration:run -c seed",
-    "seed:revert": "npm run typeorm:cli -- migration:revert -c seed",
+    "seed:revert": "npm run typeorm:cli -- migration:revert 7 -c seed",
     "data:synchronize": "NODE_OPTIONS=--max-old-space-size=16384 ts-node -r tsconfig-paths/register src/modules/data-synchronizer/synchronize.ts",
     "deploy": "mv dist/backend/src/environments/environment.prod.js dist/backend/src/environments/environment.js && scp -rp dist ubuntu@book.miamiscooterrentals.com:~/miami-backend/ && scp -rp dist/assets ubuntu@book.miamiscooterrentals.com:~/miami-backend/src"
   },

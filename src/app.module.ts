@@ -18,11 +18,15 @@ import { AuthModule } from './modules/auth/auth.module';
 import { BikeInsurancePlanModule } from './modules/bike-insurance-plan/bike-insurance-plan.module';
 import { WPMigrationModule } from './modules/wp-migration/wp-migration.module';
 import { AppConstants } from './shared/common';
+import { BikeTypeModule } from './modules/bike-type/bike-type.module';
+import { BikeBrandModule } from './modules/bike-brand/bike-brand.module';
 
 @Module({
   imports: [
     AuthModule,
     BikeModule,
+    BikeTypeModule,
+    BikeBrandModule,
     UserModule,
     MailModule,
     StripeModule,
@@ -40,7 +44,7 @@ import { AppConstants } from './shared/common';
       synchronize: false,
       namingStrategy: new ConstraintsNamingStrategy(),
       logging: false,
-      name: 'default'
+      name: 'default',
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
@@ -53,7 +57,7 @@ import { AppConstants } from './shared/common';
       synchronize: false,
       namingStrategy: new ConstraintsNamingStrategy(),
       logging: false,
-      name: AppConstants.WP_DB_CONNECTION
+      name: AppConstants.WP_DB_CONNECTION,
     }),
     ConfigModule.forRoot({
       validationSchema: Joi.object({

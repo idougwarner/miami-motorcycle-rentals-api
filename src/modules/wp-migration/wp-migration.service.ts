@@ -431,7 +431,7 @@ export class WPMigrationService {
       slug: bike.slug || '',
       description: bike.description || '',
       model: bike.model || '',
-      regluarPrice: bike.regular_price || 0,
+      regularPrice: bike.regular_price || 0,
       discountPrice: bike.discount_price || 0,
       distanceIncluded: bike.distance_included || '',
       highlights: bike.highlights || '',
@@ -464,7 +464,7 @@ export class WPMigrationService {
             slug: bike.slug || '',
             description: bike.description || '',
             model: bike.model || '',
-            regluarPrice: bike.regular_price || 0,
+            regularPrice: bike.regular_price || 0,
             discountPrice: bike.discount_price || 0,
             distanceIncluded: bike.distance_included || '',
             highlights: bike.highlights || '',
@@ -544,7 +544,17 @@ export class WPMigrationService {
       allMediaItems,
     );
 
+    await sleep();
+
     await this.createBikeMediaItems(allBikeMediaItems);
     console.log('🚀 Migrate bike_media_items table');
   }
 }
+
+const sleep = () => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(true);
+    }, 1000);
+  });
+};

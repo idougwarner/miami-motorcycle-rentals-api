@@ -6,6 +6,7 @@ import {
   HttpStatus,
   Param,
   Patch,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -19,22 +20,42 @@ import { JwtAuthGuard } from '../../guards/jwt-auth.guard';
 import {
   BikeInsuranceResponseDto,
   InsuranceRequestDto,
-  WpBikeResponse,
 } from '../../shared/dtos';
 import { BikeResponse } from '../../shared/dtos/bike/bike-response.dto';
 import { BikeService } from './bike.service';
+import { GetAllBikesRequestDto } from 'src/shared/dtos/bike/bike-get-all-request.dto';
+import { BikeGetAllResponseDto } from 'src/shared/dtos/bike/bike-get-all-response.dto';
+import { BikeGetResponseDto } from 'src/shared/dtos/bike/bike-get-response.dto';
 
-@Controller('bike')
+@Controller('bikes')
 @ApiTags('Bike Controller')
 export class BikeController {
   constructor(private bikeService: BikeService) {}
 
+  @Get('/')
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({ status: HttpStatus.OK, type: [BikeGetAllResponseDto] })
+  @ApiOperation({ summary: 'Get all bikes' })
+  public async getAll(
+    @Query() params: GetAllBikesRequestDto,
+  ): Promise<BikeGetAllResponseDto[]> {
+    const { type_id, brand_id } = params;
+    return this.bikeService.getAllBikes(type_id, brand_id);
+  }
+
   @Get('/:id')
   @HttpCode(HttpStatus.OK)
-  @ApiResponse({ status: HttpStatus.OK, type: WpBikeResponse })
-  @ApiOperation({ summary: 'Get bike details from wordpress' })
-  public async getById(@Param('id') id: number): Promise<WpBikeResponse> {
-    return this.bikeService.getWpBikeDetails(id);
+  @ApiResponse({ status: HttpStatus.OK, type: BikeGetResponseDto })
+  @ApiOperation({ summary: 'Get bike details' })
+  public async getById(@Param('id') id: number): Promise<BikeGetResponseDto> {
+    return this.bikeService.getById(id);
+  }
+
+  @Get('/:id/media_items')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Get a bike Media Items' })
+  public async getMediaItemsById(@Param('id') id: number) {
+    return this.bikeService.getMediaItemsById(id);
   }
 
   @Get('/:wpId/details')

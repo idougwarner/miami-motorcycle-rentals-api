@@ -492,13 +492,13 @@ export class AddInsuracePlans1670017290712 implements MigrationInterface {
       const bike = new Bike();
       const bikeId = Number(id);
       bike.wpBikeId = bikeId;
-      bike.seoTitle ='';
+      bike.seoTitle = '';
       bike.seoDescription = '';
       bike.name = '';
       bike.slug = '';
       bike.description = '';
       bike.model = '';
-      bike.regluarPrice = 0;
+      bike.regularPrice = 0;
       bike.discountPrice = 0;
       bike.distanceIncluded = '';
       bike.highlights = '';

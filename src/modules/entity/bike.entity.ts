@@ -59,9 +59,9 @@ export class Bike extends BikeRentalBase {
 
   @Column({
     nullable: false,
-    name: 'regluar_price',
+    name: 'regular_price',
   })
-  regluarPrice: number;
+  regularPrice: number;
 
   @Column({
     nullable: false,
@@ -137,6 +137,6 @@ export class Bike extends BikeRentalBase {
   @ManyToOne(() => BikeBrand, (bikeBrand) => bikeBrand.bikes, {
     nullable: true,
   })
-  @JoinColumn({ name: 'type_id', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'brand_id', referencedColumnName: 'id' })
   brand?: BikeBrand;
 }
