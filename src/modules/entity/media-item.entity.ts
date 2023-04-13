@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, ManyToMany, OneToMany } from 'typeorm';
 import { BikeRentalBase } from './base.entity';
 import { BikeType } from './bike-type.entity';
 import { BikeBrand } from './bike-brands.entity';
@@ -62,14 +62,14 @@ export class MediaItem extends BikeRentalBase {
   type: string;
 
   @OneToMany(() => BikeType, (bikeType) => bikeType.mediaItem)
-  bikeTypes: BikeType[]
+  bikeTypes?: BikeType[];
 
   @OneToMany(() => BikeBrand, (bikeBrand) => bikeBrand.mediaItem)
-  bikeBrands: BikeBrand[]
+  bikeBrands?: BikeBrand[];
 
-  @OneToMany(() => Bike, (bike) => bike.bikeMediaItems)
-  bikes: Bike[]
+  @OneToMany(() => Bike, (bike) => bike.featuredMediaItem)
+  featuredBikes?: Bike[];
 
-  @OneToMany(() => BikeMediaItem, (bikeMediaItem) => bikeMediaItem.mediaItem)
-  bikeMediaItems: BikeMediaItem[]
+  @ManyToMany(() => Bike, (bike) => bike.mediaItems)
+  bikes?: Bike;
 }

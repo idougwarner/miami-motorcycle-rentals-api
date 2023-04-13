@@ -14,6 +14,6 @@ export class WPMigrationController {
   })
   public async initialOrder(): Promise<{}> {
     const result = await this.wpMigrationService.migrate();
-    return { status: 200, result: '' };
+    return { status: 200, result: result };
   }
 }

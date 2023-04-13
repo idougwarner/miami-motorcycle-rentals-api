@@ -1,9 +1,16 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 import { BikeRentalBase } from './base.entity';
 import { BikeInsurancePlan } from './bike-insurance-plan.entity';
 import { MediaItem } from './media-item.entity';
 import { BikeType } from './bike-type.entity';
-import { BikeMediaItem } from './bike-media-item.entity';
 import { BikeBrand } from './bike-brands.entity';
 
 @Entity({ name: 'bikes' })
@@ -91,20 +98,45 @@ export class Bike extends BikeRentalBase {
   })
   insurances?: BikeInsurancePlan[];
 
-  @OneToMany(() => BikeMediaItem, (bikeMediaItem) => bikeMediaItem.bike, {
-    cascade: ['insert', 'update', 'remove'],
+  @ManyToMany(() => MediaItem, (mediaItem) => mediaItem.bikes)
+  @JoinTable({
+    name: 'bike_media_items',
+    joinColumn: { name: 'bike_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'media_item_id', referencedColumnName: 'id' },
   })
-  bikeMediaItems?: BikeMediaItem[];
+  mediaItems: MediaItem[];
 
-  @ManyToOne(() => MediaItem, (mediaItem) => mediaItem.bikes, { nullable: true })
+  @Column({
+    nullable: false,
+    name: 'featured_media_item_id',
+  })
+  featuredMediaItemId: number;
+
+  @ManyToOne(() => MediaItem, (mediaItem) => mediaItem.featuredBikes, {
+    nullable: true,
+  })
   @JoinColumn({ name: 'featured_media_item_id', referencedColumnName: 'id' })
   featuredMediaItem?: MediaItem;
+
+  @Column({
+    nullable: false,
+    name: 'type_id',
+  })
+  typeId: number;
 
   @ManyToOne(() => BikeType, (bikeType) => bikeType.bikes, { nullable: true })
   @JoinColumn({ name: 'type_id', referencedColumnName: 'id' })
   type?: BikeType;
 
-  @ManyToOne(() => BikeBrand, (bikeBrand) => bikeBrand.bikes, { nullable: true })
+  @Column({
+    nullable: false,
+    name: 'brand_id',
+  })
+  brandId: number;
+
+  @ManyToOne(() => BikeBrand, (bikeBrand) => bikeBrand.bikes, {
+    nullable: true,
+  })
   @JoinColumn({ name: 'type_id', referencedColumnName: 'id' })
   brand?: BikeBrand;
 }
