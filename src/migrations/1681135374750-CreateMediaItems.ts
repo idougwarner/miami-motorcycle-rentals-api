@@ -1,14 +1,13 @@
-import {MigrationInterface, QueryRunner} from "typeorm";
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class CreateMediaItems1681135374750 implements MigrationInterface {
-
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
       CREATE TABLE media_items (
         id int NOT NULL AUTO_INCREMENT,
         width integer NOT NULL,
         height integer NOT NULL,
-        filesize integer NOT NULL,
+        filesize float NOT NULL,
         mime_type varchar(30) NOT NULL,
         media_url varchar(255) NOT NULL,
         filename varchar(255) NOT NULL,
@@ -25,5 +24,4 @@ export class CreateMediaItems1681135374750 implements MigrationInterface {
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`DROP TABLE media_items;`);
   }
-
 }

@@ -1,7 +1,6 @@
-import {MigrationInterface, QueryRunner} from "typeorm";
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class CreateBikeBrands1681135063347 implements MigrationInterface {
-
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
       CREATE TABLE bike_brands (
@@ -9,7 +8,7 @@ export class CreateBikeBrands1681135063347 implements MigrationInterface {
         name varchar(100) NOT NULL,
         slug varchar(100) NOT NULL,
         media_item_id integer NOT NULL,
-        revision varchar(255) NOT NULL,
+        revision TEXT NOT NULL,
         created_at datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
         updated_at datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
         PRIMARY KEY (id)
@@ -18,7 +17,6 @@ export class CreateBikeBrands1681135063347 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`DROP TABLE bike_brands;`)
+    await queryRunner.query(`DROP TABLE bike_brands;`);
   }
-
 }

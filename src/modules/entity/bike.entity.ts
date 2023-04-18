@@ -93,6 +93,12 @@ export class Bike extends BikeRentalBase {
   })
   extras: string;
 
+  @Column({
+    nullable: true,
+    name: 'status',
+  })
+  status: string;
+
   @OneToMany(() => BikeInsurancePlan, (insurance) => insurance.bike, {
     cascade: ['insert', 'update', 'remove'],
   })

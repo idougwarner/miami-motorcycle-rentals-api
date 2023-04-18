@@ -15,6 +15,7 @@ import { BikeInsurancePlanService } from '../bike-insurance-plan/bike-insurance-
 import { FindConditions } from 'typeorm';
 import { BikeGetAllResponseDto } from 'src/shared/dtos/bike/bike-get-all-response.dto';
 import { BikeGetResponseDto } from 'src/shared/dtos/bike/bike-get-response.dto';
+import { BikeStatus } from '../../shared/common';
 @Injectable()
 export class BikeService {
   miamiBikeWpUrl = environment.wpJsonBaseUrl;
@@ -32,6 +33,7 @@ export class BikeService {
     const where: FindConditions<Bike> = {};
     if (type_id) where.typeId = type_id;
     if (brand_id) where.brandId = brand_id;
+    where.status = BikeStatus.Publish;
 
     const bikes = await this.bikeRepository.findAll(where);
     if (!bikes || bikes?.length === 0) {

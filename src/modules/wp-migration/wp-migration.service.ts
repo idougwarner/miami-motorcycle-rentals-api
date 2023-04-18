@@ -9,6 +9,8 @@ import { BikeBrand } from '../entity/bike-brands.entity';
 import { BikeType } from '../entity/bike-type.entity';
 import { Bike } from '../entity/bike.entity';
 import { BikeMediaItem } from '../entity/bike-media-item.entity';
+import { processInBatches } from '../../shared/utils/processInBatches';
+import { uploadFileToS3 } from '../../shared/utils/uploadFileToS3';
 
 @Injectable()
 export class WPMigrationService {
@@ -39,6 +41,26 @@ export class WPMigrationService {
     'Sport Bikes': 'sport-bike',
     'Naked Motorcycles': 'naked-motorcycles',
     'Standard Motorcycles': 'standard-motorcycles',
+  };
+
+  private readonly brandRevisions = {
+    'Harley-Davidson':
+      'A Harley-Davidson is more than a motorcycle, it’s a cultural statement. When you jump on the back of a Harley, you are not just taking a great motorcycle out for a spin. You are joining a tradition of motorcycle lovers who are committed to Harley not just for the technology, but for the soul. Since 1903, a loyal group of bikers has chosen the natural, gnarly feeling of a Harley over any other motorcycle. Why? In a word: classic.',
+    'Indian Motorcycles':
+      'Since 1901, Indian Motorcycles have been reserved for an elite club of bikers who make their own rules. Indian motorcycles are renowned for their exceptional craftsmanship and first-class feel. Back then, the brand was responsible for some of the biggest advancements in motorcycle technology. Today, the updated models continue to boast a classic yet modern feel with top of the line amenities. You can rent one right here, right now with Miami Motorcycle Rentals.',
+    'Honda Motorcycles':
+      'Honda has maintained the spot as the largest motorcycle manufacturer in the world since the 1950s. The Honda trademark is reliability. Honda motorcycles rarely break down and are rated for their unbeatable combo of high-quality and high-value. Simple yet classic, Honda motorcycles are loved by motorcyclists all around the world. If you are after a rock-solid motorcycle that is ready to go at the twist of the throttle, rent a Miami Honda Motorcycle today.',
+    'Suzuki Motorcycles':
+      'Suzuki is one of the oldest and most renowned motorcycle brands in the world. The brand continues to offers some of the most advanced motorcycles in the industry. Suzuki fans tend to have a need for speed and respect for the brand’s advanced technology. In addition to being fast, Suzuki motorcycles are reliable and fuel-efficient. If you plan on racing down Palm Beach or the Florida Keys on a sleek bike that won’t quit, book a Suzuki Motorcycle rental in Miami now.',
+    'Ducati Motorcycles':
+      'A Ducati Motorcycle is almost synonymous to speed as the company competes in races since the 1940s. Development and innovation have been Ducati’s mission ever since its inception, and both power and acceleration have been necessary signatures from the brand. Riding on a Ducati is an experience of a lifetime. Why choose a Ducati? It’s not just the name but also the thrill of the ride!',
+    'BMW Motorcycles':
+      'When you hear the brand BMW, high-end, iconic cars quickly come to mind. Imagine the quality and performance utilized by BMW for their motorcycles. The modern BMW motorcycle showcases unmatched beauty and functionality equipped with German technology. Bikers choose BMW for their combination of off-road and on-road capabilities, leading to maximum comfort and safety during longer rides. Why rent one? You get the speed, the style, and the performance at unparalleled levels!',
+    'Vitacci Motorcycles': '',
+    'Yamaha Motorcycles':
+      'According to Consumer Reports, Yamaha is rated by owners as the most reliable motorcycle brand. There is an 11% failure rate on a four year old bike, which is best among manufacturers. The brand is known for affordable and yet extremely reliable transportation throughout the model line. Try one for yourself and rent a Yamaha Motorcycle in Miami, Florida.',
+    'Italica Motorcycles': '',
+    'Vespa Motorcycles': '',
   };
 
   async changeAutoIncrementValue(tableName: string, newValue: number) {
@@ -226,6 +248,7 @@ export class WPMigrationService {
     const rows = await this.wpDbConnection.query(
       `select
         wap.ID wp_id,
+        wap.post_status status,
         wayi.title seo_title,
         wayi.description seo_description,
         wap.post_title name,
@@ -305,17 +328,20 @@ export class WPMigrationService {
   async getAllBikeMediaItems(allBikes, allMediaItems) {
     const bikeMediaItems = await this.wpDbConnection.query(
       `select
-        wayi.object_id media_item_wp_id,
-        wayi1.object_id bike_wp_id
+        wap.ID bike_wp_id,
+        wap2.meta_value media_item_wp_id 
       from
-        wp_ay_yoast_indexable wayi
-      join wp_ay_yoast_indexable wayi1 on
-        wayi1.object_id = wayi.post_parent
+        wp_ay_posts wap
+      join wp_ay_yoast_indexable wayi on
+        wayi.object_id = wap.ID
+      join wp_ay_postmeta wap2 on
+        wap2.post_id = wap.ID
+        AND wap2.meta_key LIKE 'gallery_gallery_image_%'
       where
-        wayi1.object_type = 'post'
-        AND wayi1.object_sub_type = 'motorcycle-rental'
-        AND wayi.object_type = 'post'
-        AND wayi.object_sub_type = 'attachment' `,
+        wayi.object_type = 'post'
+        AND wayi.object_sub_type = 'motorcycle-rental'
+        AND wap2.meta_value is not NULL
+        AND wap2.meta_value <> '';`,
     );
     const startIndex = await this.getNextAutoIncrementValue(BikeMediaItem);
     return bikeMediaItems.map((bikeMediaItem, i) => {
@@ -362,19 +388,33 @@ export class WPMigrationService {
   }
 
   async createMediaItems(mediaItems) {
-    // get app wp media itmes
-    const values = mediaItems.map((item) => ({
-      id: item.id,
-      title: item.title,
-      width: item.attachment_metadata.width,
-      height: item.attachment_metadata.height,
-      filename: item.attachment_metadata.file,
-      filesize: 0,
-      mediaUrl: item.media_url,
-      alt: item.alt,
-      mimeType: item.mime_type,
-      type: getMediaType(item.mime_type),
-    }));
+    // get app wp media items
+    const makeNewMediaItem = async (mediaItem) => {
+      const { uploadedFileUrl, fileSizeInKB } = await uploadFileToS3(
+        mediaItem.media_url,
+        mediaItem.attachment_metadata.file.replaceAll('/', '-'),
+      );
+      return {
+        id: mediaItem.id,
+        title: mediaItem.title,
+        width: mediaItem.attachment_metadata.width,
+        height: mediaItem.attachment_metadata.height,
+        filename: mediaItem.attachment_metadata.file,
+        filesize: fileSizeInKB || 0,
+        mediaUrl: uploadedFileUrl,
+        alt: mediaItem.alt,
+        mimeType: mediaItem.mime_type,
+        type: getMediaType(mediaItem.mime_type),
+      };
+    };
+
+    const values = await processInBatches(
+      mediaItems,
+      (mediaItem) => makeNewMediaItem(mediaItem),
+      100,
+      10,
+    );
+
     // insert media_items in app db
     await this.appConnection
       .createQueryBuilder()
@@ -392,7 +432,7 @@ export class WPMigrationService {
         name: brand.name,
         slug: brand.slug,
         mediaItemId: brand.mediaItemId,
-        revision: '',
+        revision: this.brandRevisions[brand.name] || '',
       };
     });
     // insert
@@ -437,6 +477,7 @@ export class WPMigrationService {
       highlights: bike.highlights || '',
       features: bike.features || '',
       extras: bike.extras || '',
+      status: bike.status || null,
       featuredMediaItemId: bike.featuredMediaItemId,
       typeId: bike.typeId,
       brandId: bike.brandId,
@@ -470,6 +511,7 @@ export class WPMigrationService {
             highlights: bike.highlights || '',
             features: bike.features || '',
             extras: bike.extras || '',
+            status: bike.status || null,
             featuredMediaItemId: bike.featuredMediaItemId,
             typeId: bike.typeId,
             brandId: bike.brandId,
@@ -486,12 +528,16 @@ export class WPMigrationService {
       bikeId: bikeMediaItem.bikeId,
       mediaItemId: bikeMediaItem.mediaItemId,
     }));
+    console.log(
+      'Null BikeMediaItems',
+      values.filter((el) => !el.bikeId || !el.mediaItemId),
+    );
     // insert
     await this.appConnection
       .createQueryBuilder()
       .insert()
       .into(BikeMediaItem)
-      .values(values)
+      .values(values.filter((el) => el.bikeId && el.mediaItemId))
       .execute();
   }
 

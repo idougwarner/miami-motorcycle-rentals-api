@@ -18,3 +18,8 @@ export enum OrderStatusEnum {
   cancelled = 'cancelled',
   completed = 'completed',
 }
+
+export enum BikeStatus {
+  Publish = 'publish',
+  Draft = 'draft',
+}
