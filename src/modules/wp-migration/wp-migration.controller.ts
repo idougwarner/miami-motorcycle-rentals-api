@@ -7,7 +7,7 @@ import { WPMigrationService } from './wp-migration.service';
 export class WPMigrationController {
   constructor(private wpMigrationService: WPMigrationService) {}
 
-  @Post('/start')
+  // @Post('/start')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({
     summary: 'Migration WP db to nestjs db',

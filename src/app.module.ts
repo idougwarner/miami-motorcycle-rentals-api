@@ -46,19 +46,19 @@ import { BikeBrandModule } from './modules/bike-brand/bike-brand.module';
       logging: false,
       name: 'default',
     }),
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: process.env.WP_DB_HOST,
-      port: Number(process.env.WP_DB_PORT),
-      username: process.env.WP_DB_USER,
-      password: process.env.WP_DB_PASSWORD,
-      database: process.env.WP_DB_NAME,
-      entities: entities,
-      synchronize: false,
-      namingStrategy: new ConstraintsNamingStrategy(),
-      logging: false,
-      name: AppConstants.WP_DB_CONNECTION,
-    }),
+    // TypeOrmModule.forRoot({
+    //   type: 'mysql',
+    //   host: process.env.WP_DB_HOST,
+    //   port: Number(process.env.WP_DB_PORT),
+    //   username: process.env.WP_DB_USER,
+    //   password: process.env.WP_DB_PASSWORD,
+    //   database: process.env.WP_DB_NAME,
+    //   entities: entities,
+    //   synchronize: false,
+    //   namingStrategy: new ConstraintsNamingStrategy(),
+    //   logging: false,
+    //   name: AppConstants.WP_DB_CONNECTION,
+    // }),
     ConfigModule.forRoot({
       validationSchema: Joi.object({
         DB_PORT: Joi.number()

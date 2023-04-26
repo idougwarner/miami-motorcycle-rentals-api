@@ -33,6 +33,8 @@ export class BikeController {
   constructor(private bikeService: BikeService) {}
 
   @Get('/')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('access-token')
   @HttpCode(HttpStatus.OK)
   @ApiResponse({ status: HttpStatus.OK, type: [BikeGetAllResponseDto] })
   @ApiOperation({ summary: 'Get all bikes' })
@@ -44,6 +46,8 @@ export class BikeController {
   }
 
   @Get('/:id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('access-token')
   @HttpCode(HttpStatus.OK)
   @ApiResponse({ status: HttpStatus.OK, type: BikeGetResponseDto })
   @ApiOperation({ summary: 'Get bike details' })
@@ -52,6 +56,8 @@ export class BikeController {
   }
 
   @Get('/:id/media_items')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('access-token')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Get a bike Media Items' })
   public async getMediaItemsById(@Param('id') id: number) {

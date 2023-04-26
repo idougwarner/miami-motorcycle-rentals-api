@@ -15,7 +15,7 @@ import { uploadFileToS3 } from '../../shared/utils/uploadFileToS3';
 @Injectable()
 export class WPMigrationService {
   constructor(
-    @InjectEntityManager(AppConstants.WP_DB_CONNECTION)
+    // @InjectEntityManager(AppConstants.WP_DB_CONNECTION)
     private readonly wpDbConnection: EntityManager,
 
     @InjectEntityManager('default')
