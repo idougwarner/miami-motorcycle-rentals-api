@@ -98,4 +98,10 @@ export class BikeRentalOrderController {
   public async resendVerificationCode(@Param('orderId') orderId: number) {
     return this.bikeRentalService.resendVerificationCode(orderId);
   }
+
+  @Post('/migrationUpdate')
+  @HttpCode(HttpStatus.OK)
+  public async updateBikeId() {
+    return this.bikeRentalService.updateBikeId();
+  }
 }

@@ -52,7 +52,7 @@ export class BikeController {
   @ApiResponse({ status: HttpStatus.OK, type: BikeGetResponseDto })
   @ApiOperation({ summary: 'Get bike details' })
   public async getById(@Param('id') id: number): Promise<BikeGetResponseDto> {
-    return this.bikeService.getById(id);
+    return this.bikeService.getDetailsById(id);
   }
 
   @Get('/:id/media_items')
@@ -64,19 +64,7 @@ export class BikeController {
     return this.bikeService.getMediaItemsById(id);
   }
 
-  @Get('/:wpId/details')
-  @HttpCode(HttpStatus.OK)
-  @ApiResponse({ status: HttpStatus.OK, type: BikeResponse })
-  @ApiOperation({
-    summary: 'Get bike details  by bike wordpress id',
-  })
-  public async getBikeDetails(
-    @Param('wpId') id: number,
-  ): Promise<BikeResponse> {
-    return this.bikeService.getBikeDetailsByWordpressId(id);
-  }
-
-  @Patch('/:wpId/insurance')
+  @Patch('/:id/insurance')
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('access-token')
@@ -86,7 +74,7 @@ export class BikeController {
     summary: 'Get bike details  by bike wordpress id',
   })
   public async updateBikeInsurance(
-    @Param('wpId') id: number,
+    @Param('id') id: number,
     @Body() insurance: InsuranceRequestDto,
   ): Promise<BikeInsuranceResponseDto> {
     return this.bikeService.updateBikeInsurance(id, insurance);

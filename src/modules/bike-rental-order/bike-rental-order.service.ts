@@ -342,4 +342,16 @@ export class BikeRentalOrderService {
 
     return bikeOrder;
   }
+
+  async updateBikeId() {
+    const bikes = await this.bikeService.findAll();
+    return Promise.all(
+      bikes.map(async (bike) => {
+        return this.bikeRentalRepository.updateBikeIdFromWpId(
+          bike.id,
+          bike.wpBikeId,
+        );
+      }),
+    );
+  }
 }

@@ -26,10 +26,8 @@ export class BikeRepository {
     });
   }
 
-  async find(id: number): Promise<Bike> {
-    return this.bikeRepository.findOne(id, {
-      relations: ['brand', 'featuredMediaItem'],
-    });
+  async find(id: number, options: { relations?: string[] }): Promise<Bike> {
+    return this.bikeRepository.findOne(id, options);
   }
 
   async getMediaItemsById(id: number) {

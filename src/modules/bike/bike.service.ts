@@ -26,16 +26,20 @@ export class BikeService {
     private bikeInsurancePlanService: BikeInsurancePlanService,
   ) {}
 
+  async findAll(where: FindConditions<Bike> = {}): Promise<Bike[]> {
+    return await this.bikeRepository.findAll(where);
+  }
+
   async getAllBikes(
-    type_id: number,
-    brand_id: number,
+    type_id?: number,
+    brand_id?: number,
   ): Promise<BikeGetAllResponseDto[]> {
     const where: FindConditions<Bike> = {};
     if (type_id) where.typeId = type_id;
     if (brand_id) where.brandId = brand_id;
     where.status = BikeStatus.Publish;
 
-    const bikes = await this.bikeRepository.findAll(where);
+    const bikes = await this.findAll(where);
     if (!bikes || bikes?.length === 0) {
       throw new NotFoundException('Bikes not found');
     }
@@ -45,8 +49,10 @@ export class BikeService {
     });
   }
 
-  async getById(id: number): Promise<BikeGetResponseDto> {
-    const bike = await this.bikeRepository.find(id);
+  async getDetailsById(id: number): Promise<BikeGetResponseDto> {
+    const bike = await this.bikeRepository.find(id, {
+      relations: ['brand', 'featuredMediaItem'],
+    });
     if (!bike) {
       throw new NotFoundException('Bike not found');
     }
@@ -73,19 +79,11 @@ export class BikeService {
     });
   }
 
-  async getBikeDetailsByWordpressId(wpId: number): Promise<BikeResponse> {
-    const bike = this.getBikeByWordPressId(wpId);
-
-    return plainToClass(BikeResponse, bike, {
-      excludeExtraneousValues: true,
-    });
-  }
-
   async updateBikeInsurance(
-    wpId: number,
+    id: number,
     insuranceRequest: InsuranceRequestDto,
   ): Promise<BikeInsuranceResponseDto> {
-    const bike = await this.getBikeByWordPressId(wpId);
+    const bike = await this.getWithInsuranceById(id);
 
     const insurancePlan = bike.insurances.find(
       (data) => data.id === insuranceRequest.id,
@@ -103,8 +101,10 @@ export class BikeService {
     });
   }
 
-  async getBikeByWordPressId(wpId: number): Promise<Bike> {
-    const bike = await this.bikeRepository.getBikeDetailsByWordpressId(wpId);
+  async getWithInsuranceById(id: number): Promise<Bike> {
+    const bike = await this.bikeRepository.find(id, {
+      relations: ['insurances'],
+    });
     if (!bike) {
       throw new NotFoundException('Bike not found');
     }

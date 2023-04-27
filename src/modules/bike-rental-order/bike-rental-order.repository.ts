@@ -130,4 +130,13 @@ export class BikeRentalOrderRepository {
       )
       .getMany();
   }
+
+  async updateBikeIdFromWpId(id: number, wpId: number) {
+    return await this.bikeRentalRepository
+      .createQueryBuilder()
+      .update()
+      .set({ bikeId: id })
+      .where({ bikeId: wpId })
+      .execute();
+  }
 }
