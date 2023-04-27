@@ -33,7 +33,6 @@ export class BikeController {
   constructor(private bikeService: BikeService) {}
 
   @Get('/')
-  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('access-token')
   @HttpCode(HttpStatus.OK)
   @ApiResponse({ status: HttpStatus.OK, type: [BikeGetAllResponseDto] })
