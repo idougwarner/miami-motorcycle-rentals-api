@@ -3,13 +3,10 @@ import { environment } from '../../environments/environment';
 import { Stripe } from 'stripe';
 import {
   CreateStripePaymentIntentRequestDto,
-  WpBikeResponse,
+  BikeForOrderResponse,
 } from 'src/shared/dtos';
 import * as moment from 'moment';
-import {
-  BikePricing,
-  CalculationResult,
-} from '../../shared/calculations';
+import { BikePricing, CalculationResult } from '../../shared/calculations';
 import { AppConstants } from '../../shared/common';
 import { BikeInsurancePlanService } from '../bike-insurance-plan/bike-insurance-plan.service';
 import { convertDateFormat } from '../../shared/utils/date-util';
@@ -36,7 +33,7 @@ export class StripeService {
   async createPaymentIntent(
     orderId: number,
     orderDetails: CreateStripePaymentIntentRequestDto,
-    bikeDetails: WpBikeResponse,
+    bikeDetails: BikeForOrderResponse,
   ) {
     this.logger.log({
       message: 'Stripe payment intent creation request',

@@ -113,14 +113,14 @@ export class BikeRentalOrderRepository {
   }
 
   /**
-   * @param bikeWordpressId
+   * @param bikeId
    * @returns all requested order with pickup date current date - 1 day to address all timezone issue
    */
-  async getBikeRequestedOrder(bikeWordpressId: number) {
+  async getBikeRequestedOrder(bikeId: number) {
     return this.bikeRentalRepository
       .createQueryBuilder('order')
-      .where('order.bike_id = :bikeWordpressId', {
-        bikeWordpressId,
+      .where('order.bike_id = :bikeId', {
+        bikeId,
       })
       .andWhere(
         'status = :status and DATE(pick_up_date) >= DATE(NOW() - INTERVAL 1 DAY)',

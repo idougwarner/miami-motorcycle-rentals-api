@@ -5,7 +5,7 @@ import { firstValueFrom } from 'rxjs';
 import {
   BikeInsuranceResponseDto,
   InsuranceRequestDto,
-  WpBikeResponse,
+  BikeForOrderResponse,
 } from '../../shared/dtos';
 import { plainToClass, plainToInstance } from 'class-transformer';
 import { BikeRepository } from './bike.repository';
@@ -71,10 +71,11 @@ export class BikeService {
     return bike.mediaItems || [];
   }
 
-  async getWpBikeDetails(wpId: number): Promise<WpBikeResponse> {
-    const url = `${this.miamiBikeWpUrl}/wp-json/wp/v2/motorcycle-rental/${wpId}`;
-    const { data } = await firstValueFrom(this.httpService.get(url));
-    return plainToClass(WpBikeResponse, data, {
+  async getBikeDetailsForOrder(id: number): Promise<BikeForOrderResponse> {
+    // const url = `${this.miamiBikeWpUrl}/wp-json/wp/v2/motorcycle-rental/${wpId}`;
+    // const { data } = await firstValueFrom(this.httpService.get(url));
+    const bike = this.getDetailsById(id);
+    return plainToClass(BikeForOrderResponse, bike, {
       excludeExtraneousValues: true,
     });
   }

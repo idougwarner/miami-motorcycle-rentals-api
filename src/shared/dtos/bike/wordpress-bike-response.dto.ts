@@ -1,7 +1,7 @@
 import { ApiResponseProperty } from '@nestjs/swagger';
 import { Expose, Transform } from 'class-transformer';
 
-export class WpBikeResponse {
+export class BikeForOrderResponse {
   @ApiResponseProperty()
   @Expose()
   @Transform((bike) => bike?.obj?.id)
@@ -9,23 +9,23 @@ export class WpBikeResponse {
 
   @ApiResponseProperty()
   @Expose()
-  @Transform((bike) => bike?.obj?.title?.rendered)
+  @Transform((bike) => bike?.obj?.name)
   title: string;
 
   @ApiResponseProperty()
   @Expose()
-  @Transform((bike) => bike?.obj?.ACF?.brand)
+  @Transform((bike) => bike?.obj?.brand?.name)
   brand: string;
 
   @ApiResponseProperty()
   @Expose()
-  @Transform((bike) => bike?.obj?.ACF?.model)
+  @Transform((bike) => bike?.obj?.model)
   model: string;
 
   @ApiResponseProperty()
   @Expose()
   @Transform((bike) => {
-    const price = bike?.obj?.ACF?.['regular-price'];
+    const price = bike?.obj?.regularPrice;
     return price ? Number(price) : 0;
   })
   dailyPrice: number;
@@ -33,7 +33,7 @@ export class WpBikeResponse {
   @ApiResponseProperty()
   @Expose()
   @Transform((bike) => {
-    const price = bike?.obj?.ACF?.['discount-price'];
+    const price = bike?.obj?.discountPrice;
     return price ? Number(price) : 0;
   })
   discountPrice: number;
@@ -41,13 +41,7 @@ export class WpBikeResponse {
   @ApiResponseProperty()
   @Expose()
   @Transform((bike) => {
-    let imageUrl = '';
-    Object.keys(bike?.obj?.ACF?.gallery).forEach((bikeImgField) => {
-      if (bike?.obj?.ACF?.gallery[bikeImgField] && !imageUrl) {
-        imageUrl = bike?.obj?.ACF?.gallery[bikeImgField].url;
-      }
-    });
-
+    let imageUrl = bike?.obj?.featuredMediaItem.mediaUrl || '';
     return imageUrl;
   })
   primaryImage: string;
