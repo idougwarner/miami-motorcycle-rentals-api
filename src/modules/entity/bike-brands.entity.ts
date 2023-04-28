@@ -14,6 +14,9 @@ export class BikeBrand extends BikeRentalBase {
   @Column({ type: 'int', name: 'media_item_id' })
   mediaItemId: number;
 
+  @Column({ type: 'int', name: 'is_popular' })
+  isPopular: boolean;
+
   @Column({ type: 'varchar', length: 255 })
   revision: string;
 

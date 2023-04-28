@@ -21,7 +21,6 @@ import {
   BikeInsuranceResponseDto,
   InsuranceRequestDto,
 } from '../../shared/dtos';
-import { BikeResponse } from '../../shared/dtos/bike/bike-response.dto';
 import { BikeService } from './bike.service';
 import { GetAllBikesRequestDto } from 'src/shared/dtos/bike/bike-get-all-request.dto';
 import { BikeGetAllResponseDto } from 'src/shared/dtos/bike/bike-get-all-response.dto';
@@ -33,7 +32,6 @@ export class BikeController {
   constructor(private bikeService: BikeService) {}
 
   @Get('/')
-  @ApiBearerAuth('access-token')
   @HttpCode(HttpStatus.OK)
   @ApiResponse({ status: HttpStatus.OK, type: [BikeGetAllResponseDto] })
   @ApiOperation({ summary: 'Get all bikes' })
@@ -45,8 +43,6 @@ export class BikeController {
   }
 
   @Get('/:id')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth('access-token')
   @HttpCode(HttpStatus.OK)
   @ApiResponse({ status: HttpStatus.OK, type: BikeGetResponseDto })
   @ApiOperation({ summary: 'Get bike details' })
@@ -55,8 +51,6 @@ export class BikeController {
   }
 
   @Get('/:id/media_items')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth('access-token')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Get a bike Media Items' })
   public async getMediaItemsById(@Param('id') id: number) {

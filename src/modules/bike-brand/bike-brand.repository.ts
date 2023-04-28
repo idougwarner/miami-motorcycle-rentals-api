@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindConditions, Repository } from 'typeorm';
 import { BikeBrand } from '../entity/bike-brands.entity';
 
 @Injectable()
@@ -10,8 +10,9 @@ export class BikeBrandRepository {
     private readonly bikeBrandRepository: Repository<BikeBrand>,
   ) {}
 
-  async findAll(): Promise<BikeBrand[]> {
+  async findAll(where: FindConditions<BikeBrand> = {}): Promise<BikeBrand[]> {
     return this.bikeBrandRepository.find({
+      where,
       relations: ['mediaItem'],
     });
   }

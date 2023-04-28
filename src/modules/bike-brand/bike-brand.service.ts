@@ -7,7 +7,9 @@ export class BikeBrandService {
   constructor(private bikeBrandRepository: BikeBrandRepository) {}
 
   async getAll(): Promise<BikeBrandGetResponseDto[]> {
-    const bikeBrands = await this.bikeBrandRepository.findAll();
+    const bikeBrands = await this.bikeBrandRepository.findAll({
+      isPopular: true,
+    });
     if (!bikeBrands || bikeBrands?.length === 0) {
       throw new NotFoundException('Brands not found');
     }

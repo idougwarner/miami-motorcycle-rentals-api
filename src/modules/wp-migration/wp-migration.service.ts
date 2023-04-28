@@ -189,7 +189,8 @@ export class WPMigrationService {
         wap.post_name slug,
         wayi.open_graph_image_id media_item_wp_id,
         wap.post_date_gmt created_at,
-        wap.post_modified_gmt updated_at
+        wap.post_modified_gmt updated_at,
+        1 as is_popular
       from
         wp_ay_posts wap
         join wp_ay_yoast_indexable wayi
@@ -197,6 +198,22 @@ export class WPMigrationService {
       where
         wap.post_type = 'popular_brands'`,
     );
+    // add brands manually
+    wpAllBrands.push({
+      name: 'Vitacci Motorcycles',
+      slug: 'vitacci-motorcycles',
+      is_popular: 0,
+    });
+    wpAllBrands.push({
+      name: 'Italica Motorcycles',
+      slug: 'italica-motorcycles',
+      is_popular: 0,
+    });
+    wpAllBrands.push({
+      name: 'Vespa Motorcycles',
+      slug: 'vespa-motorcycles',
+      is_popular: 0,
+    });
 
     const startIndex = await this.getNextAutoIncrementValue(BikeBrand);
     return wpAllBrands.map((brand, i) => {
@@ -432,6 +449,7 @@ export class WPMigrationService {
         name: brand.name,
         slug: brand.slug,
         mediaItemId: brand.mediaItemId,
+        isPopular: brand.is_popular,
         revision: this.brandRevisions[brand.name] || '',
       };
     });
