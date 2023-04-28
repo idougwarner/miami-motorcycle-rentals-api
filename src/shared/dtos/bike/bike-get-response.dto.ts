@@ -13,6 +13,14 @@ export class BikeGetResponseDto extends BaseResponseDto {
 
   @ApiResponseProperty()
   @Expose()
+  name: string;
+
+  @ApiResponseProperty()
+  @Expose()
+  slug: string;
+
+  @ApiResponseProperty()
+  @Expose()
   brandId: number;
 
   @ApiResponseProperty()
