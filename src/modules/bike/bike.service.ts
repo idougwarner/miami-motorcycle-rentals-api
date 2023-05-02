@@ -62,6 +62,14 @@ export class BikeService {
     });
   }
 
+  async getBikeWithInsurancesById(id: number): Promise<BikeResponse> {
+    const bike = this.getWithInsuranceById(id);
+
+    return plainToClass(BikeResponse, bike, {
+      excludeExtraneousValues: true,
+    });
+  }
+
   async getMediaItemsById(id: number) {
     const bike = await this.bikeRepository.getMediaItemsById(id);
     if (!bike) {
@@ -81,13 +89,14 @@ export class BikeService {
   }
 
   async updateBikeInsurance(
-    id: number,
+    bikeId: number,
+    insuranceId: number,
     insuranceRequest: InsuranceRequestDto,
   ): Promise<BikeInsuranceResponseDto> {
-    const bike = await this.getWithInsuranceById(id);
+    const bike = await this.getWithInsuranceById(bikeId);
 
     const insurancePlan = bike.insurances.find(
-      (data) => data.id === insuranceRequest.id,
+      (data) => data.id === insuranceId,
     );
 
     const updatedInsurance =

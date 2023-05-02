@@ -3,10 +3,6 @@ import { IsNotEmpty } from 'class-validator';
 import { InsuranceEnum } from '../../common';
 
 export class InsuranceRequestDto {
-  @ApiProperty()
-  @IsNotEmpty()
-  id: number;
-
   @ApiProperty({
     type: 'enum',
     enum: InsuranceEnum,

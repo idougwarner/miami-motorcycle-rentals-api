@@ -25,6 +25,7 @@ import { BikeService } from './bike.service';
 import { GetAllBikesRequestDto } from 'src/shared/dtos/bike/bike-get-all-request.dto';
 import { BikeGetAllResponseDto } from 'src/shared/dtos/bike/bike-get-all-response.dto';
 import { BikeGetResponseDto } from 'src/shared/dtos/bike/bike-get-response.dto';
+import { BikeResponse } from 'src/shared/dtos/bike/bike-response.dto';
 
 @Controller('bikes')
 @ApiTags('Bike Controller')
@@ -50,6 +51,16 @@ export class BikeController {
     return this.bikeService.getDetailsById(id);
   }
 
+  @Get('/:id/insurances')
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({ status: HttpStatus.OK, type: BikeResponse })
+  @ApiOperation({ summary: 'Get a bike details with insurances' })
+  public async getWithInsurancesById(
+    @Param('id') id: number,
+  ): Promise<BikeResponse> {
+    return this.bikeService.getBikeWithInsurancesById(id);
+  }
+
   @Get('/:id/media_items')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Get a bike Media Items' })
@@ -57,19 +68,20 @@ export class BikeController {
     return this.bikeService.getMediaItemsById(id);
   }
 
-  @Patch('/:id/insurance')
+  @Patch('/:bikeId/insurance/:insuranceId')
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('access-token')
   @ApiBody({ type: InsuranceRequestDto })
   @ApiResponse({ status: HttpStatus.OK, type: BikeInsuranceResponseDto })
   @ApiOperation({
-    summary: 'Get bike details  by bike wordpress id',
+    summary: 'Patch a bike insurance by bike id',
   })
   public async updateBikeInsurance(
-    @Param('id') id: number,
+    @Param('bikeId') bikeId: number,
+    @Param('insuranceId') insuranceId: number,
     @Body() insurance: InsuranceRequestDto,
   ): Promise<BikeInsuranceResponseDto> {
-    return this.bikeService.updateBikeInsurance(id, insurance);
+    return this.bikeService.updateBikeInsurance(bikeId, insuranceId, insurance);
   }
 }
