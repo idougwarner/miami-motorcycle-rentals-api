@@ -96,7 +96,7 @@ export class BikeService {
     const bike = await this.getWithInsuranceById(bikeId);
 
     const insurancePlan = bike.insurances.find(
-      (data) => data.id === insuranceId,
+      (data) => data.id === +insuranceId,
     );
 
     const updatedInsurance =
