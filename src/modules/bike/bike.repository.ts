@@ -21,6 +21,9 @@ export class BikeRepository {
 
   async findAll(where: FindConditions<Bike>): Promise<Bike[]> {
     return this.bikeRepository.find({
+      order: {
+        discountPrice: 'DESC',
+      },
       where,
       relations: ['brand', 'featuredMediaItem'],
     });
