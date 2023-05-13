@@ -409,7 +409,7 @@ export class WPMigrationService {
     const makeNewMediaItem = async (mediaItem) => {
       const { uploadedFileUrl, fileSizeInKB } = await uploadFileToS3(
         mediaItem.media_url,
-        mediaItem.attachment_metadata.file.replaceAll('/', '-'),
+        mediaItem.attachment_metadata.file.replace(/\//g, '-'),
       );
       return {
         id: mediaItem.id,
