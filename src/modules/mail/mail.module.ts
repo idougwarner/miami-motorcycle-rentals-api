@@ -24,7 +24,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
           from: configService.get('SENDER_EMAIL'),
         },
         template: {
-          dir: join(__dirname, '../../../../assets/email-templates'),
+          dir: join(__dirname, '../../assets/email-templates'),
           adapter: new HandlebarsAdapter(),
           options: {
             strict: true,
@@ -32,7 +32,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         },
         options: {
           partials: {
-            dir: join(__dirname, '../../../../assets/email-templates/partials'),
+            dir: join(__dirname, '../../assets/email-templates/partials'),
             options: {
               strict: true,
             },

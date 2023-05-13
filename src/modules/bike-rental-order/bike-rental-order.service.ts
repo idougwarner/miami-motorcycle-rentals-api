@@ -13,7 +13,7 @@ import { OrderStatusEnum } from '../../shared/common';
 import {
   InitialBikeRentalRequest,
   UpdateBikeRentalRequest,
-  WpBikeResponse,
+  BikeForOrderResponse,
   VerifyOrderRequest,
   InitialBikeOrderResponse,
   UpdateBikeOrderResponse,
@@ -52,7 +52,9 @@ export class BikeRentalOrderService {
   ): Promise<InitialBikeOrderResponse> {
     this.logger.log(`Creating new order with details `, body);
 
-    const bikeDetails = await this.bikeService.getWpBikeDetails(body.bikeId);
+    const bikeDetails = await this.bikeService.getBikeDetailsForOrder(
+      body.bikeId,
+    );
 
     if (!bikeDetails) {
       throw new NotFoundException('Bike does not exist ');
@@ -288,17 +290,19 @@ export class BikeRentalOrderService {
   }
 
   async getBikeRequestedOrder(
-    bikeWordpressId: number,
+    bikeId: number,
   ): Promise<Array<RequestedOrderDatesResponseDto>> {
     const requestedOrders =
-      await this.bikeRentalRepository.getBikeRequestedOrder(bikeWordpressId);
+      await this.bikeRentalRepository.getBikeRequestedOrder(bikeId);
 
     return plainToInstance(RequestedOrderDatesResponseDto, requestedOrders, {
       excludeExtraneousValues: true,
     });
   }
 
-  private buildInitialBikeOrder(bikeDetails: WpBikeResponse): BikeRentalOrder {
+  private buildInitialBikeOrder(
+    bikeDetails: BikeForOrderResponse,
+  ): BikeRentalOrder {
     const initialBikeOrder = new BikeRentalOrder();
     initialBikeOrder.bikeId = bikeDetails.id;
     initialBikeOrder.bikeBrand = bikeDetails.brand;
@@ -341,5 +345,17 @@ export class BikeRentalOrderService {
     bikeOrder.accessories = accessories;
 
     return bikeOrder;
+  }
+
+  async updateBikeId() {
+    const bikes = await this.bikeService.findAll();
+    return Promise.all(
+      bikes.map(async (bike) => {
+        return this.bikeRentalRepository.updateBikeIdFromWpId(
+          bike.id,
+          bike.wpBikeId,
+        );
+      }),
+    );
   }
 }

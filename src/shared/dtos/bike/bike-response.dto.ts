@@ -6,7 +6,7 @@ import { BikeInsuranceResponseDto } from './bike-insurance.response.dto';
 export class BikeResponse extends BaseResponseDto {
   @ApiResponseProperty()
   @Expose()
-  wpBikeId: number;
+  id: number;
 
   @Expose()
   @Transform((bike) => bike?.obj?.insurances)

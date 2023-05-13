@@ -7,10 +7,7 @@ import { EmailTemplates } from '../../shared/email-templates';
 import { User } from '../entity/user.entity';
 import { BikeRentalOrder } from '../entity/bike-rental-order.entity';
 import { isArray } from 'class-validator';
-import {
-  CalculationResult,
-  SALES_TAX_CONFIG,
-} from '../../shared/calculations';
+import { CalculationResult, SALES_TAX_CONFIG } from '../../shared/calculations';
 import { convertDateFormat } from '../../shared/utils/date-util';
 
 @Injectable()
@@ -175,7 +172,7 @@ export class MailService {
     attachments.push({
       path: join(
         __dirname,
-        '../../../../assets/email-templates/images/email-header.png',
+        '../../assets/email-templates/images/email-header.png',
       ),
       cid: 'logo',
     });

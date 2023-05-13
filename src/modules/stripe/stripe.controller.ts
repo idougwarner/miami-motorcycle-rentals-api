@@ -30,7 +30,9 @@ export class StripeController {
     @Param('orderId') id: number,
     @Body() body: CreateStripePaymentIntentRequestDto,
   ) {
-    const bikeDetails = await this.bikeService.getWpBikeDetails(body.bikeId);
+    const bikeDetails = await this.bikeService.getBikeDetailsForOrder(
+      body.bikeId,
+    );
 
     return await this.stripeService.createPaymentIntent(id, body, bikeDetails);
   }

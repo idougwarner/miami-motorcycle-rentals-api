@@ -7,4 +7,5 @@ export class AppConstants {
   public static readonly JWT_SECRET = 'secretKey';
   public static readonly JWT_SIGN_OPTIONS = { expiresIn: '1hr' };
   public static readonly TEST = 'TEST'; // sample usage of shared resource
+  public static readonly WP_DB_CONNECTION = 'wp_db_connection';
 }

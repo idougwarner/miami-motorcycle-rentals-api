@@ -6,7 +6,7 @@ import { BikeAccessoryOrder } from './bike-accessory-order.entity';
 import { BikeInsurancePlan } from './bike-insurance-plan.entity';
 import { User } from './user.entity';
 
-@Entity({ name: 'bike_rental_order' })
+@Entity({ name: 'bike_rental_orders' })
 export class BikeRentalOrder extends BikeRentalBase {
   @Column({
     nullable: false,
@@ -149,7 +149,7 @@ export class BikeRentalOrder extends BikeRentalBase {
   @JoinColumn({ name: 'insurance_id' })
   bikeInsurancePlan: BikeInsurancePlan;
 
-  @OneToMany(() => BikeAccessoryOrder, (accessory) => accessory.bikeRental, {
+  @OneToMany(() => BikeAccessoryOrder, (accessory) => accessory.bikeRentalOrder, {
     cascade: ['insert'],
   })
   accessories: BikeAccessoryOrder[];

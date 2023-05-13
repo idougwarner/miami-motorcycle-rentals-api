@@ -37,16 +37,16 @@ export class BikeRentalOrderController {
     return this.bikeRentalService.initialOrder(body);
   }
 
-  @Get('/:bikeWpId/requested')
+  @Get('/:bikeId/requested')
   @HttpCode(HttpStatus.OK)
   @ApiResponse({ status: HttpStatus.OK, type: RequestedOrderDatesResponseDto })
   @ApiOperation({
     summary: 'Get all bike order with REQUESTED status',
   })
   public async bikeRequestedOrder(
-    @Param('bikeWpId') bikeWpId: number,
+    @Param('bikeId') bikeId: number,
   ): Promise<Array<RequestedOrderDatesResponseDto>> {
-    return this.bikeRentalService.getBikeRequestedOrder(bikeWpId);
+    return this.bikeRentalService.getBikeRequestedOrder(bikeId);
   }
 
   @Patch('/:orderId/verify-order')
@@ -97,5 +97,11 @@ export class BikeRentalOrderController {
   })
   public async resendVerificationCode(@Param('orderId') orderId: number) {
     return this.bikeRentalService.resendVerificationCode(orderId);
+  }
+
+  // @Post('/migrationUpdate')
+  @HttpCode(HttpStatus.OK)
+  public async updateBikeId() {
+    return this.bikeRentalService.updateBikeId();
   }
 }

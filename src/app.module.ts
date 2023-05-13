@@ -16,16 +16,23 @@ import { StripeModule } from './modules/stripe/stripe.module';
 import { ConstraintsNamingStrategy } from './core/constraints-naming-strategy';
 import { AuthModule } from './modules/auth/auth.module';
 import { BikeInsurancePlanModule } from './modules/bike-insurance-plan/bike-insurance-plan.module';
+import { WPMigrationModule } from './modules/wp-migration/wp-migration.module';
+import { AppConstants } from './shared/common';
+import { BikeTypeModule } from './modules/bike-type/bike-type.module';
+import { BikeBrandModule } from './modules/bike-brand/bike-brand.module';
 
 @Module({
   imports: [
     AuthModule,
     BikeModule,
+    BikeTypeModule,
+    BikeBrandModule,
     UserModule,
     MailModule,
     StripeModule,
     BikeRentalOrderModule,
     BikeInsurancePlanModule,
+    WPMigrationModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DB_HOST,
@@ -37,8 +44,21 @@ import { BikeInsurancePlanModule } from './modules/bike-insurance-plan/bike-insu
       synchronize: false,
       namingStrategy: new ConstraintsNamingStrategy(),
       logging: false,
+      name: 'default',
     }),
-
+    // TypeOrmModule.forRoot({
+    //   type: 'mysql',
+    //   host: process.env.WP_DB_HOST,
+    //   port: Number(process.env.WP_DB_PORT),
+    //   username: process.env.WP_DB_USER,
+    //   password: process.env.WP_DB_PASSWORD,
+    //   database: process.env.WP_DB_NAME,
+    //   entities: entities,
+    //   synchronize: false,
+    //   namingStrategy: new ConstraintsNamingStrategy(),
+    //   logging: false,
+    //   name: AppConstants.WP_DB_CONNECTION,
+    // }),
     ConfigModule.forRoot({
       validationSchema: Joi.object({
         DB_PORT: Joi.number()
