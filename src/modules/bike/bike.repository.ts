@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindConditions, Repository } from 'typeorm';
 import { Bike } from '../entity/bike.entity';
+import { MediaSize } from '../../shared/common';
 
 @Injectable()
 export class BikeRepository {
@@ -19,14 +20,23 @@ export class BikeRepository {
     });
   }
 
-  async findAll(where: FindConditions<Bike>): Promise<Bike[]> {
-    return this.bikeRepository.find({
-      order: {
-        discountPrice: 'DESC',
-      },
-      where,
-      relations: ['brand', 'featuredMediaItem'],
-    });
+  async findAll(
+    where: FindConditions<Bike>,
+    mediaSize?: MediaSize,
+  ): Promise<Bike[]> {
+    return this.bikeRepository
+      .createQueryBuilder('bike')
+      .leftJoinAndSelect('bike.brand', 'brand')
+      .leftJoinAndSelect('bike.featuredMediaItem', 'featuredMediaItem')
+      .leftJoinAndSelect(
+        'featuredMediaItem.transformedMediaItems',
+        'transformedMediaItem',
+        'transformedMediaItem.mediaSize = :mediaSize',
+        { mediaSize: mediaSize },
+      )
+      .where(where)
+      .orderBy('bike.discountPrice', 'DESC')
+      .getMany();
   }
 
   async find(id: number, options: { relations?: string[] }): Promise<Bike> {

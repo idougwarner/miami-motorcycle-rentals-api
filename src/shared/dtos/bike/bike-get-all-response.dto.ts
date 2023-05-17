@@ -45,6 +45,9 @@ export class BikeGetAllResponseDto extends BaseResponseDto {
 
   @ApiResponseProperty()
   @Expose()
-  @Transform((bike: { obj: Bike }) => bike?.obj?.featuredMediaItem)
-  featuredMediaItem: MediaItem;
+  @Transform(
+    (bike: { obj: Bike }) =>
+      bike?.obj?.featuredMediaItem?.transformedMediaItems?.[0],
+  )
+  transformedMediaItem: MediaItem;
 }
