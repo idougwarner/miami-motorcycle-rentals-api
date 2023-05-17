@@ -481,7 +481,7 @@ export class WPMigrationService {
     const makeNewMediaItem = async (mediaItem) => {
       const { uploadedFileUrl, fileSizeInKB } = await uploadFileToS3(
         mediaItem.media_url,
-        mediaItem.attachment_metadata.filename.replace(/\//g, '-'),
+        mediaItem.filename.replace(/\//g, '-'),
       );
       return {
         width: mediaItem.width,
@@ -690,7 +690,9 @@ export class WPMigrationService {
     await this.createBikeMediaItems(allBikeMediaItems);
     console.log('🚀 Migrate bike_media_items table');
 
-    console.log('🚀 Completed tables migrate');
+    console.log(
+      `🚀 Completed tables migrate. Please run @Post('/migrationUpdate') API to update bikeId in bikeRentalRepository`,
+    );
   }
 }
 
