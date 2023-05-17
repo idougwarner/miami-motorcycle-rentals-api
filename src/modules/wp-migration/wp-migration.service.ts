@@ -130,6 +130,40 @@ export class WPMigrationService {
     });
   }
 
+  getTransformedMediaItems(mediaItems) {
+    const constructTransformedMediaItems = (mediaItem) => {
+      const baseUrl = mediaItem.media_url.substring(
+        0,
+        mediaItem.media_url.lastIndexOf('/') + 1,
+      );
+
+      const transformedImages = [];
+      for (const size in mediaItem.attachment_metadata.sizes) {
+        const image = mediaItem.attachment_metadata.sizes[size];
+        transformedImages.push({
+          width: image.width,
+          height: image.height,
+          filesize: 0,
+          mime_type: image['mime-type'],
+          media_size: size,
+          media_url: `${baseUrl}${image.file}`,
+          filename: image.file,
+          mediaItemId: mediaItem.id,
+          type: getMediaType(image['mime-type']),
+        });
+      }
+
+      return transformedImages;
+    };
+
+    const mediaItemsSizes = mediaItems.map(constructTransformedMediaItems);
+    const transformedMediaItems = mediaItemsSizes.reduce(
+      (acc, val) => acc.concat(val),
+      [],
+    );
+    return transformedMediaItems;
+  }
+
   async getBikeBrandMapping() {
     return this.wpDbConnection.query(
       `select
@@ -560,11 +594,21 @@ export class WPMigrationService {
   }
 
   async migrate() {
-    await this.cleanDB();
-    console.log('🚀 Cleaned tables');
+    // await this.cleanDB();
+    // console.log('🚀 Cleaned tables');
     // return;
 
     const allMediaItems = await this.getAllMediaItems();
+
+    const allTransformedMediaItems = this.getTransformedMediaItems(
+      allMediaItems.splice(0, 10),
+    );
+    console.log(
+      '🚀 ~ file: wp-migration.service.ts:602 ~ WPMigrationService ~ migrate ~ allTransformedMediaItems:',
+      allTransformedMediaItems,
+    );
+
+    return;
     const allBrands = await this.getAllBrands(allMediaItems);
     const allTypes = await this.getAllTypes(allMediaItems);
     const allBikes = await this.getAllBikes(allMediaItems, allBrands, allTypes);

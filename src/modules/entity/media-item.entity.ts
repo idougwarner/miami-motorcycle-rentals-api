@@ -3,7 +3,7 @@ import { BikeRentalBase } from './base.entity';
 import { BikeType } from './bike-type.entity';
 import { BikeBrand } from './bike-brands.entity';
 import { Bike } from './bike.entity';
-import { BikeMediaItem } from './bike-media-item.entity';
+import { TransformedMediaItem } from './transformed-media-item.entity';
 
 @Entity({ name: 'media_items' })
 export class MediaItem extends BikeRentalBase {
@@ -72,4 +72,10 @@ export class MediaItem extends BikeRentalBase {
 
   @ManyToMany(() => Bike, (bike) => bike.mediaItems)
   bikes?: Bike;
+
+  @OneToMany(
+    () => TransformedMediaItem,
+    (transformedMediaItem) => transformedMediaItem.mediaItem,
+  )
+  transformedMediaItems?: TransformedMediaItem[];
 }
