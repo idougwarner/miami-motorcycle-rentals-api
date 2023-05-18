@@ -49,5 +49,5 @@ export class BikeGetAllResponseDto extends BaseResponseDto {
     (bike: { obj: Bike }) =>
       bike?.obj?.featuredMediaItem?.transformedMediaItems?.[0],
   )
-  transformedMediaItem: MediaItem;
+  featuredMediaItem: MediaItem;
 }
