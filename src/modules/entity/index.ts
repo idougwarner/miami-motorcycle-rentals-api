@@ -7,6 +7,7 @@ import { BikeType } from './bike-type.entity';
 import { BikeBrand } from './bike-brands.entity';
 import { BikeMediaItem } from './bike-media-item.entity';
 import { MediaItem } from './media-item.entity';
+import { TransformedMediaItem } from './transformed-media-item.entity';
 
 const entities = [
   User,
@@ -17,7 +18,8 @@ const entities = [
   BikeType,
   BikeBrand,
   BikeMediaItem,
-  MediaItem
+  MediaItem,
+  TransformedMediaItem,
 ];
 
 export default entities;

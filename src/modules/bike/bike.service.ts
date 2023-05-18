@@ -15,7 +15,7 @@ import { BikeInsurancePlanService } from '../bike-insurance-plan/bike-insurance-
 import { FindConditions } from 'typeorm';
 import { BikeGetAllResponseDto } from 'src/shared/dtos/bike/bike-get-all-response.dto';
 import { BikeGetResponseDto } from 'src/shared/dtos/bike/bike-get-response.dto';
-import { BikeStatus } from '../../shared/common';
+import { BikeStatus, MediaSize } from '../../shared/common';
 @Injectable()
 export class BikeService {
   miamiBikeWpUrl = environment.wpJsonBaseUrl;
@@ -26,8 +26,11 @@ export class BikeService {
     private bikeInsurancePlanService: BikeInsurancePlanService,
   ) {}
 
-  async findAll(where: FindConditions<Bike> = {}): Promise<Bike[]> {
-    return await this.bikeRepository.findAll(where);
+  async findAll(
+    where: FindConditions<Bike> = {},
+    mediaSize?: MediaSize,
+  ): Promise<Bike[]> {
+    return await this.bikeRepository.findAll(where, mediaSize);
   }
 
   async getAllBikes(
@@ -39,7 +42,7 @@ export class BikeService {
     if (brand_id) where.brandId = brand_id;
     where.status = BikeStatus.Publish;
 
-    const bikes = await this.findAll(where);
+    const bikes = await this.findAll(where, MediaSize.MediumLarge);
     if (!bikes || bikes?.length === 0) {
       throw new NotFoundException('Bikes not found');
     }
@@ -51,7 +54,11 @@ export class BikeService {
 
   async getDetailsById(id: number): Promise<BikeGetResponseDto> {
     const bike = await this.bikeRepository.find(id, {
-      relations: ['brand', 'featuredMediaItem'],
+      relations: [
+        'brand',
+        'featuredMediaItem',
+        'featuredMediaItem.transformedMediaItems',
+      ],
     });
     if (!bike) {
       throw new NotFoundException('Bike not found');

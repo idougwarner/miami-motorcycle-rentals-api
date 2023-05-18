@@ -23,3 +23,20 @@ export enum BikeStatus {
   Publish = 'publish',
   Draft = 'draft',
 }
+
+export enum MediaSize {
+  Large = 'large',
+  Medium = 'medium',
+  Thumbnail = 'thumbnail',
+  MediumLarge = 'medium_large',
+  XL = '1536x1536',
+  PostMain = 'et-pb-post-main-image',
+  PostMainFullWidth = 'et-pb-post-main-image-fullwidth',
+  Portfolio = 'et-pb-portfolio-image',
+  PortfolioModule = 'et-pb-portfolio-module-image',
+  PortfolioSingle = 'et-pb-portfolio-image-single',
+  Gallery = 'et-pb-gallery-module-image-portrait',
+  Desktop = 'et-pb-image--responsive--desktop',
+  Tablet = 'et-pb-image--responsive--tablet',
+  Phone = 'et-pb-image--responsive--phone',
+}

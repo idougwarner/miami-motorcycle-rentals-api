@@ -11,6 +11,7 @@ import { Bike } from '../entity/bike.entity';
 import { BikeMediaItem } from '../entity/bike-media-item.entity';
 import { processInBatches } from '../../shared/utils/processInBatches';
 import { uploadFileToS3 } from '../../shared/utils/uploadFileToS3';
+import { TransformedMediaItem } from '../entity/transformed-media-item.entity';
 
 @Injectable()
 export class WPMigrationService {
@@ -128,6 +129,40 @@ export class WPMigrationService {
         attachment_metadata,
       };
     });
+  }
+
+  getTransformedMediaItems(mediaItems) {
+    const constructTransformedMediaItems = (mediaItem) => {
+      const baseUrl = mediaItem.media_url.substring(
+        0,
+        mediaItem.media_url.lastIndexOf('/') + 1,
+      );
+
+      const transformedImages = [];
+      for (const size in mediaItem.attachment_metadata.sizes) {
+        const image = mediaItem.attachment_metadata.sizes[size];
+        transformedImages.push({
+          width: image.width,
+          height: image.height,
+          filesize: 0,
+          mime_type: image['mime-type'],
+          media_size: size,
+          media_url: `${baseUrl}${image.file}`,
+          filename: image.file,
+          mediaItemId: mediaItem.id,
+          type: getMediaType(image['mime-type']),
+        });
+      }
+
+      return transformedImages;
+    };
+
+    const mediaItemsSizes = mediaItems.map(constructTransformedMediaItems);
+    const transformedMediaItems = mediaItemsSizes.reduce(
+      (acc, val) => acc.concat(val),
+      [],
+    );
+    return transformedMediaItems;
   }
 
   async getBikeBrandMapping() {
@@ -441,6 +476,42 @@ export class WPMigrationService {
       .execute();
   }
 
+  async createTransformedMediaItems(mediaItems) {
+    // get app wp media items
+    const makeNewMediaItem = async (mediaItem) => {
+      const { uploadedFileUrl, fileSizeInKB } = await uploadFileToS3(
+        mediaItem.media_url,
+        mediaItem.filename.replace(/\//g, '-'),
+      );
+      return {
+        width: mediaItem.width,
+        height: mediaItem.height,
+        filesize: fileSizeInKB || 0,
+        mimeType: mediaItem.mime_type,
+        mediaSize: mediaItem.media_size,
+        mediaUrl: uploadedFileUrl,
+        filename: mediaItem.filename,
+        mediaItemId: mediaItem.mediaItemId,
+        type: mediaItem.type,
+      };
+    };
+
+    const values = await processInBatches(
+      mediaItems,
+      (mediaItem) => makeNewMediaItem(mediaItem),
+      100,
+      10,
+    );
+
+    // insert media_items in app db
+    await this.appConnection
+      .createQueryBuilder()
+      .insert()
+      .into(TransformedMediaItem)
+      .values(values)
+      .execute();
+  }
+
   async createBikeBrands(allBrands) {
     // get allBrands
     const values = allBrands.map((brand) => {
@@ -562,15 +633,21 @@ export class WPMigrationService {
   async migrate() {
     await this.cleanDB();
     console.log('🚀 Cleaned tables');
-    // return;
 
     const allMediaItems = await this.getAllMediaItems();
+
+    const allTransformedMediaItems =
+      this.getTransformedMediaItems(allMediaItems);
+
     const allBrands = await this.getAllBrands(allMediaItems);
     const allTypes = await this.getAllTypes(allMediaItems);
     const allBikes = await this.getAllBikes(allMediaItems, allBrands, allTypes);
 
     await this.createMediaItems(allMediaItems);
     console.log('🚀 Migrated media_items table');
+
+    await this.createTransformedMediaItems(allTransformedMediaItems);
+    console.log('🚀 Migrated transformed_media_item table');
 
     await this.createBikeBrands(allBrands);
     console.log('🚀 Migrated bike_brands table');
@@ -612,6 +689,10 @@ export class WPMigrationService {
 
     await this.createBikeMediaItems(allBikeMediaItems);
     console.log('🚀 Migrate bike_media_items table');
+
+    console.log(
+      `🚀 Completed tables migrate. Please run @Post('/migrationUpdate') API to update bikeId in bikeRentalRepository`,
+    );
   }
 }
 
