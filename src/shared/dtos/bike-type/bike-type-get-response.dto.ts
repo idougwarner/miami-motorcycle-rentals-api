@@ -1,8 +1,8 @@
 import { ApiResponseProperty } from '@nestjs/swagger';
 import { Expose, Transform, Type } from 'class-transformer';
 import { BaseResponseDto } from '..';
-import { MediaItem } from 'src/modules/entity/media-item.entity';
 import { BikeType } from 'src/modules/entity/bike-type.entity';
+import { TransformedMediaItem } from 'src/modules/entity/transformed-media-item.entity';
 
 export class BikeTypeGetResponseDto extends BaseResponseDto {
   @ApiResponseProperty()
@@ -23,6 +23,9 @@ export class BikeTypeGetResponseDto extends BaseResponseDto {
 
   @ApiResponseProperty()
   @Expose()
-  @Transform((bike: { obj: BikeType }) => bike?.obj?.mediaItem)
-  mediaItem: MediaItem;
+  @Transform(
+    (bike: { obj: BikeType }) =>
+      bike?.obj?.mediaItem?.transformedMediaItems?.[0],
+  )
+  mediaItem: TransformedMediaItem;
 }
