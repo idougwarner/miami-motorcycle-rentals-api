@@ -85,7 +85,7 @@ export class MailService {
     const mailConfig: MailOptions = {
       to: bikeOrder.user.email,
       template: EmailTemplates.RENT_REQUEST_TO_CLIENT,
-      subject: 'Bike Rent Request',
+      subject: 'New Booking Received',
       attachments: [
         {
           path: bikeOrder.bikeImage,
