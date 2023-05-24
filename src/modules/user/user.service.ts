@@ -93,16 +93,31 @@ export class UserService {
   }
 
   @Transactional()
-  async createUserFromBikeRequest(
+  async createUpdateUserFromBikeRequest(
     body: InitialBikeRentalRequest,
   ): Promise<UserDetails> {
     this.logger.log(`Creating User  details`, body);
     const existingUser = await this.userRepository.findByEmail(body.email);
 
     if (existingUser) {
+      const updatedUser = await this.userRepository.updateDetails(
+        existingUser.id,
+        {
+          firstName: body.firstName,
+          lastName: body.lastName,
+          dateOfBirth: body.dateOfBirth,
+          streetAddress: body.streetAddress,
+          aptSuite: body.aptSuite,
+          state: body.state,
+          city: body.city,
+          country: body.country,
+          postalCode: body.postalCode,
+          phoneNumber: body.phoneNumber,
+        },
+      );
       return {
         isExistingCustomer: true,
-        user: existingUser,
+        user: updatedUser,
       };
     }
 

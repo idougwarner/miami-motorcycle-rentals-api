@@ -60,7 +60,9 @@ export class BikeRentalOrderService {
       throw new NotFoundException('Bike does not exist ');
     }
 
-    const userDetails = await this.userService.createUserFromBikeRequest(body);
+    const userDetails = await this.userService.createUpdateUserFromBikeRequest(
+      body,
+    );
 
     const initialBikeOrder = this.buildInitialBikeOrder(bikeDetails);
     initialBikeOrder.user = userDetails.user;

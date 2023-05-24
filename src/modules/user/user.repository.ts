@@ -56,7 +56,12 @@ export class UserRepository {
       .execute();
   }
 
-  async updateDetails(userId: number, request: UpdateUserDetailsRequest) {
+  async updateDetails(
+    userId: number,
+    request:
+      | Omit<UpdateUserDetailsRequest, 'verificationCode'>
+      | UpdateUserDetailsRequest,
+  ) {
     await this.usersRepository
       .createQueryBuilder()
       .update()
