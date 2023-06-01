@@ -29,6 +29,10 @@ export class BikeGetAllResponseDto extends BaseResponseDto {
 
   @ApiResponseProperty()
   @Expose()
+  typeId: number;
+
+  @ApiResponseProperty()
+  @Expose()
   model: string;
 
   @ApiResponseProperty()
