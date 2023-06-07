@@ -108,10 +108,10 @@ export class UserService {
           dateOfBirth: body.dateOfBirth,
           streetAddress: body.streetAddress,
           aptSuite: body.aptSuite,
-          state: body.state,
+          state: body.state || '',
           city: body.city,
           country: body.country,
-          postalCode: body.postalCode,
+          postalCode: body.postalCode || '',
           phoneNumber: body.phoneNumber,
         },
       );
@@ -121,7 +121,11 @@ export class UserService {
       };
     }
 
-    const newUser = this.buildUserDetailsFromBikeRequest(body);
+    const newUser = this.buildUserDetailsFromBikeRequest({
+      ...body,
+      state: body.state || '',
+      postalCode: body.postalCode || '',
+    });
     const user = await this.userRepository.saveUser(newUser);
     return {
       isExistingCustomer: false,

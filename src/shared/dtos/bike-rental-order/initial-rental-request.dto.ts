@@ -45,11 +45,9 @@ export class InitialBikeRentalRequest {
   @ApiProperty()
   aptSuite!: string;
 
-  @ApiProperty()
-  @IsNotEmpty()
-  state!: string;
+  @ApiProperty({ required: false })
+  state: string;
 
-  @ApiProperty()
-  @IsNotEmpty()
-  postalCode!: string;
+  @ApiProperty({ required: false })
+  postalCode: string;
 }
