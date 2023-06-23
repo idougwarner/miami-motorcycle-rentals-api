@@ -1,10 +1,9 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { Stripe } from 'stripe';
-import { environment } from './environments/environment';
 
 @Controller()
 export class AppController {
-  sk = environment.stripeSecretKey;
+  sk = process.env.STRIPE_SECRET_KEY;
 
   config: Stripe.StripeConfig = { apiVersion: '2022-08-01' };
 

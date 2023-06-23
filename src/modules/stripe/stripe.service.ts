@@ -1,5 +1,4 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { environment } from '../../environments/environment';
 import { Stripe } from 'stripe';
 import {
   CreateStripePaymentIntentRequestDto,
@@ -15,7 +14,7 @@ import { BikeRentalOrderService } from '../bike-rental-order/bike-rental-order.s
 @Injectable()
 export class StripeService {
   private readonly logger = new Logger(StripeService.name);
-  stripeSecretKey = environment.stripeSecretKey;
+  stripeSecretKey = process.env.STRIPE_SECRET_KEY;
   /**
    * About Stripe api version (required):
    *  When backwards-incompatible changes are made to the API, a new, dated version is released. The current version is 2022-08-01
