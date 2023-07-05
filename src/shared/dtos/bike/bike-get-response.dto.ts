@@ -17,6 +17,14 @@ export class BikeGetResponseDto extends BaseResponseDto {
 
   @ApiResponseProperty()
   @Expose()
+  seoTitle: string;
+
+  @ApiResponseProperty()
+  @Expose()
+  seoDescription: string;
+
+  @ApiResponseProperty()
+  @Expose()
   slug: string;
 
   @ApiResponseProperty()
