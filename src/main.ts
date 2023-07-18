@@ -13,7 +13,10 @@ async function bootstrap() {
   const port = process.env.PORT || 3000;
   const host = process.env.HOST;
   const app = await NestFactory.create(AppModule);
-  app.use(compression()); // Use compression middleware
+
+  app.use('/api/bikes', compression());
+  app.use('/api/brands', compression());
+  app.use('/api/types', compression());
 
   initializeTransactionalContext();
   patchTypeORMRepositoryWithBaseRepository();
