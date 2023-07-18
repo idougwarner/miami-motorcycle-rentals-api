@@ -83,7 +83,17 @@ export class BikeService {
       throw new NotFoundException('Bike not found');
     }
 
-    return bike.mediaItems || [];
+    return (
+      bike.mediaItems.map((mediaItem) => {
+        return {
+          ...mediaItem,
+          mediaUrl: mediaItem.mediaUrl.replace(
+            /^(https?:\/\/[^\/]*)(.*)$/,
+            `${process.env.FE_BASE_URL}$2`,
+          ),
+        };
+      }) || []
+    );
   }
 
   async getBikeDetailsForOrder(id: number): Promise<BikeForOrderResponse> {
