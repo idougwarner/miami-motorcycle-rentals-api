@@ -6,11 +6,17 @@ import {
   initializeTransactionalContext,
   patchTypeORMRepositoryWithBaseRepository,
 } from 'typeorm-transactional-cls-hooked';
+import * as compression from 'compression';
+
 async function bootstrap() {
   const globalPrefix = 'api';
   const port = process.env.PORT || 3000;
   const host = process.env.HOST;
   const app = await NestFactory.create(AppModule);
+
+  app.use('/api/bikes', compression());
+  app.use('/api/brands', compression());
+  app.use('/api/types', compression());
 
   initializeTransactionalContext();
   patchTypeORMRepositoryWithBaseRepository();
