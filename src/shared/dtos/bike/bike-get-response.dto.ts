@@ -58,7 +58,28 @@ export class BikeGetResponseDto extends BaseResponseDto {
 
   @ApiResponseProperty()
   @Expose()
-  @Transform((bike: { obj: Bike }) => bike?.obj?.featuredMediaItem)
+  @Transform((bike: { obj: Bike }) => {
+    if (bike?.obj?.featuredMediaItem) {
+      bike.obj.featuredMediaItem.mediaUrl =
+        bike.obj.featuredMediaItem.mediaUrl.replace(
+          /^(https?:\/\/[^\/]*)(.*)$/,
+          `${process.env.FE_BASE_URL}$2`,
+        );
+
+      if (bike?.obj?.featuredMediaItem?.transformedMediaItems) {
+        bike?.obj?.featuredMediaItem?.transformedMediaItems.forEach(
+          (transformedMediaItem) => {
+            transformedMediaItem.mediaUrl =
+              transformedMediaItem.mediaUrl.replace(
+                /^(https?:\/\/[^\/]*)(.*)$/,
+                `${process.env.FE_BASE_URL}$2`,
+              );
+          },
+        );
+      }
+    }
+    return bike?.obj?.featuredMediaItem;
+  })
   featuredMediaItem: MediaItem;
 
   @ApiResponseProperty()

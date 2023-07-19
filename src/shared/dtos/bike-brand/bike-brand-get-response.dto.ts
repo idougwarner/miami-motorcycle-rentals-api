@@ -23,7 +23,15 @@ export class BikeBrandGetResponseDto extends BaseResponseDto {
 
   @ApiResponseProperty()
   @Expose()
-  @Transform((bike: { obj: BikeBrand }) => bike?.obj?.mediaItem)
+  @Transform((bike: { obj: BikeBrand }) => {
+    if (bike?.obj?.mediaItem) {
+      bike.obj.mediaItem.mediaUrl = bike.obj.mediaItem.mediaUrl.replace(
+        /^(https?:\/\/[^\/]*)(.*)$/,
+        `${process.env.FE_BASE_URL}$2`,
+      );
+    }
+    return bike?.obj?.mediaItem;
+  })
   mediaItem: MediaItem;
 
   @ApiResponseProperty()
