@@ -63,7 +63,7 @@ export class BikeGetResponseDto extends BaseResponseDto {
       bike.obj.featuredMediaItem.mediaUrl =
         bike.obj.featuredMediaItem.mediaUrl.replace(
           /^(https?:\/\/[^\/]*)(.*)$/,
-          `${process.env.FE_BASE_URL}$2`,
+          `${process.env.CLOUDFRONT_BASE_URL}$2`,
         );
 
       if (bike?.obj?.featuredMediaItem?.transformedMediaItems) {
@@ -72,7 +72,7 @@ export class BikeGetResponseDto extends BaseResponseDto {
             transformedMediaItem.mediaUrl =
               transformedMediaItem.mediaUrl.replace(
                 /^(https?:\/\/[^\/]*)(.*)$/,
-                `${process.env.FE_BASE_URL}$2`,
+                `${process.env.CLOUDFRONT_BASE_URL}$2`,
               );
           },
         );

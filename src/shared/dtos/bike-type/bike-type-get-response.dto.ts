@@ -28,7 +28,7 @@ export class BikeTypeGetResponseDto extends BaseResponseDto {
       bike.obj.mediaItem.transformedMediaItems[0].mediaUrl =
         bike.obj.mediaItem.transformedMediaItems[0].mediaUrl.replace(
           /^(https?:\/\/[^\/]*)(.*)$/,
-          `${process.env.FE_BASE_URL}$2`,
+          `${process.env.CLOUDFRONT_BASE_URL}$2`,
         );
     }
     return bike?.obj?.mediaItem?.transformedMediaItems?.[0];

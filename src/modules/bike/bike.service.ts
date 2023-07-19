@@ -89,7 +89,7 @@ export class BikeService {
           ...mediaItem,
           mediaUrl: mediaItem.mediaUrl.replace(
             /^(https?:\/\/[^\/]*)(.*)$/,
-            `${process.env.FE_BASE_URL}$2`,
+            `${process.env.CLOUDFRONT_BASE_URL}$2`,
           ),
         };
       }) || []
