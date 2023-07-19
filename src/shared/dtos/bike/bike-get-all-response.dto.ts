@@ -54,7 +54,7 @@ export class BikeGetAllResponseDto extends BaseResponseDto {
       bike.obj.featuredMediaItem.transformedMediaItems[0].mediaUrl =
         bike.obj.featuredMediaItem.transformedMediaItems[0].mediaUrl.replace(
           /^(https?:\/\/[^\/]*)(.*)$/,
-          `${process.env.FE_BASE_URL}$2`,
+          `${process.env.CLOUDFRONT_BASE_URL}$2`,
         );
     }
     return bike?.obj?.featuredMediaItem?.transformedMediaItems?.[0];
