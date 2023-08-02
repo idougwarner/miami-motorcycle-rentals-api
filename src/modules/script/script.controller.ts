@@ -372,7 +372,7 @@ export class ScriptController {
         ],
       },
       {
-        id: 81, //rent-a-vespa-sprint-50-red
+        id: 88, //rent-a-vespa-sprint-50-red  | stage: 81
         altTexts: [
           'rent-a-vespa-sprint-50-motorcycle-front-right-side',
           'rent-a-vespa-sprint-50-motorcycle-back-side',
@@ -397,7 +397,7 @@ export class ScriptController {
         ],
       },
       {
-        id: 80, //rent-a-vespa-lx-50-yellow
+        id: 87, //rent-a-vespa-lx-50-yellow | stage: 80
         altTexts: [
           'rent-a-vespa-lx-50cc-motorcycle-yellow-front-right-side',
           'rent-a-vespa-lx-50cc-motorcycle-yellow-back-right-side',
