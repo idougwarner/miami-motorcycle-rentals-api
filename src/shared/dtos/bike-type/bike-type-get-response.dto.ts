@@ -25,6 +25,7 @@ export class BikeTypeGetResponseDto extends BaseResponseDto {
   @Expose()
   @Transform((bike: { obj: BikeType }) => {
     if (bike?.obj?.mediaItem?.transformedMediaItems?.[0]) {
+      bike.obj.mediaItem.transformedMediaItems[0].alt = bike.obj.mediaItem.alt;
       bike.obj.mediaItem.transformedMediaItems[0].mediaUrl =
         bike.obj.mediaItem.transformedMediaItems[0].mediaUrl.replace(
           /^(https?:\/\/[^\/]*)(.*)$/,
