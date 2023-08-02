@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { BikeRentalBase } from './base.entity';
 import { MediaItem } from './media-item.entity';
@@ -54,6 +55,9 @@ export class TransformedMediaItem extends BikeRentalBase {
     name: 'type',
   })
   type: string;
+
+  @Exclude()
+  alt: string;
 
   @ManyToOne(() => MediaItem)
   @JoinColumn({ name: 'media_item_id' })
