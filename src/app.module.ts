@@ -20,6 +20,7 @@ import { WPMigrationModule } from './modules/wp-migration/wp-migration.module';
 import { AppConstants } from './shared/common';
 import { BikeTypeModule } from './modules/bike-type/bike-type.module';
 import { BikeBrandModule } from './modules/bike-brand/bike-brand.module';
+import { ScriptModule } from './modules/script/script.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { BikeBrandModule } from './modules/bike-brand/bike-brand.module';
     BikeRentalOrderModule,
     BikeInsurancePlanModule,
     WPMigrationModule,
+    ScriptModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DB_HOST,
