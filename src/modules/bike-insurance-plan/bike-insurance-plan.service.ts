@@ -42,4 +42,8 @@ export class BikeInsurancePlanService {
     );
     return insurancePlan;
   }
+
+  async createInsurancePlan(data: Partial<BikeInsurancePlan>) {
+    await this.bikeInsurancePlanRepository.saveInsurance(data);
+  }
 }

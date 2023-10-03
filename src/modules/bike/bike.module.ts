@@ -6,10 +6,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Bike } from '../entity/bike.entity';
 import { BikeRepository } from './bike.repository';
 import { BikeInsurancePlanModule } from '../bike-insurance-plan/bike-insurance-plan.module';
+import { BikeOffDayModule } from '../bike-off-day/bike-off-day.module';
+import { BikeBasePriceModule } from '../bike-base-price/bike-base-price.module';
+import { RelatedBikeModule } from '../related-bike/related-bike.module';
 @Module({
   imports: [
     HttpModule,
     BikeInsurancePlanModule,
+    BikeOffDayModule,
+    BikeBasePriceModule,
+    RelatedBikeModule,
     TypeOrmModule.forFeature([Bike]),
   ],
   providers: [BikeService, BikeRepository],

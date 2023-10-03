@@ -16,6 +16,10 @@ import { FindConditions } from 'typeorm';
 import { BikeGetAllResponseDto } from 'src/shared/dtos/bike/bike-get-all-response.dto';
 import { BikeGetResponseDto } from 'src/shared/dtos/bike/bike-get-response.dto';
 import { BikeStatus, MediaSize } from '../../shared/common';
+import { BikeCreateRequestDto } from 'src/shared/dtos/bike/bike-create-request.dto';
+import { BikeOffDayService } from '../bike-off-day/bike-off-day.service';
+import { BikeBasePriceService } from '../bike-base-price/bike-base-price.service';
+import { RelatedBikeService } from '../related-bike/related-bike.service';
 @Injectable()
 export class BikeService {
   miamiBikeWpUrl = environment.wpJsonBaseUrl;
@@ -24,6 +28,9 @@ export class BikeService {
     private httpService: HttpService,
     private bikeRepository: BikeRepository,
     private bikeInsurancePlanService: BikeInsurancePlanService,
+    private bikeOffDayService: BikeOffDayService,
+    private bikeBasePriceService: BikeBasePriceService,
+    private relatedBikeService: RelatedBikeService,
   ) {}
 
   async findAll(
@@ -137,5 +144,50 @@ export class BikeService {
     }
 
     return bike;
+  }
+
+  async createBike(bikeData: BikeCreateRequestDto) {
+    const bikeDetail = bikeData.bike;
+    const newBike = await this.bikeRepository.createBike({
+      ...bikeDetail,
+      wpBikeId: 0,
+      seoTitle: '',
+      seoDescription: '',
+    });
+
+    const offDaysData = bikeData.offDays;
+    const basePricesData = bikeData.basePrices;
+    const relatedBikesData = bikeData.relatedBikes;
+    const insurancesData = bikeData.insurancePlans;
+
+    for (const offDayData of offDaysData) {
+      await this.bikeOffDayService.createBikeOffDay({
+        ...offDayData,
+        bike: newBike,
+      });
+    }
+
+    for (const basePriceData of basePricesData) {
+      await this.bikeBasePriceService.createBikeBasePrice({
+        ...basePriceData,
+        bike: newBike,
+      });
+    }
+
+    for (const insuranceData of insurancesData) {
+      await this.bikeInsurancePlanService.createInsurancePlan({
+        ...insuranceData,
+        bike: newBike,
+      });
+    }
+
+    for (const relatedBikeData of relatedBikesData) {
+      await this.relatedBikeService.createRelatedBike({
+        bikeId: newBike.id,
+        relatedBikeId: relatedBikeData.relatedBikeId,
+      });
+    }
+
+    return newBike;
   }
 }

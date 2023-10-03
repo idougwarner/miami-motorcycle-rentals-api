@@ -1,0 +1,16 @@
+import { InjectRepository } from '@nestjs/typeorm';
+import { EntityRepository, Repository } from 'typeorm';
+import { RelatedBike } from '../entity/related-bike.entity';
+
+@EntityRepository(RelatedBike)
+export class RelatedBikeRepository {
+  constructor(
+    @InjectRepository(RelatedBike)
+    private readonly relatedBikeRepository: Repository<RelatedBike>,
+  ) {}
+
+  async createRelatedBike(data: Partial<RelatedBike>): Promise<RelatedBike> {
+    const relatedBike = this.relatedBikeRepository.create(data);
+    return await this.relatedBikeRepository.save(relatedBike);
+  }
+}

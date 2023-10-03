@@ -12,11 +12,14 @@ import { BikeInsurancePlan } from './bike-insurance-plan.entity';
 import { MediaItem } from './media-item.entity';
 import { BikeType } from './bike-type.entity';
 import { BikeBrand } from './bike-brands.entity';
+import { BikeOffDay } from './bike-off-day.entity';
+import { BikeBasePrice } from './bike-base-price.entity';
+import { RelatedBike } from './related-bike.entity';
 
 @Entity({ name: 'bikes' })
 export class Bike extends BikeRentalBase {
   @Column({
-    nullable: false,
+    nullable: true,
     name: 'wp_bike_id',
   })
   wpBikeId: number;
@@ -99,6 +102,18 @@ export class Bike extends BikeRentalBase {
   })
   status: string;
 
+  @Column({
+    nullable: false,
+    name: 'discount_percentage',
+  })
+  discountPercentage: number;
+
+  @Column({
+    nullable: false,
+    name: 'position',
+  })
+  position: number;
+
   @OneToMany(() => BikeInsurancePlan, (insurance) => insurance.bike, {
     cascade: ['insert', 'update', 'remove'],
   })
@@ -145,4 +160,26 @@ export class Bike extends BikeRentalBase {
   })
   @JoinColumn({ name: 'brand_id', referencedColumnName: 'id' })
   brand?: BikeBrand;
+
+  @OneToMany(() => BikeOffDay, (offDay) => offDay.bike, {
+    cascade: ['insert', 'update', 'remove'],
+  })
+  bikeOffDays?: BikeOffDay[];
+
+  @OneToMany(() => BikeBasePrice, (basePrice) => basePrice.bike, {
+    cascade: ['insert', 'update', 'remove'],
+  })
+  bikeBasePrices?: BikeBasePrice[];
+
+  @OneToMany(() => RelatedBike, (relatedBike) => relatedBike.bike)
+  relatedBikes: RelatedBike[];
+
+  @OneToMany(() => RelatedBike, (relatedBike) => relatedBike.relatedBike)
+  bikesRelatedTo: RelatedBike[];
+  /**
+   * usage
+   * const bikeWithRelatedBikes = await bikeRepository.findOne(1, { 
+      relations: ['relatedBikes', 'relatedBikes.relatedBike', 'bikesRelatedTo', 'bikesRelatedTo.bike']
+    });
+   */
 }

@@ -11,7 +11,7 @@ export class BikeInsurancePlanRepository {
   ) {}
 
   async saveInsurance(
-    insurancePlan: BikeInsurancePlan,
+    insurancePlan: Partial<BikeInsurancePlan>,
   ): Promise<BikeInsurancePlan> {
     await this.bikeInsurancePlanRepository.save(insurancePlan);
 

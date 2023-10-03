@@ -46,4 +46,9 @@ export class BikeRepository {
   async getMediaItemsById(id: number) {
     return this.bikeRepository.findOne(id, { relations: ['mediaItems'] });
   }
+
+  async createBike(bikeData: Partial<Bike>): Promise<Bike> {
+    const bike = this.bikeRepository.create(bikeData);
+    return this.bikeRepository.save(bike);
+  }
 }

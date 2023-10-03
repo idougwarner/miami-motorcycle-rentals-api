@@ -6,6 +6,7 @@ import {
   HttpStatus,
   Param,
   Patch,
+  Post,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -26,6 +27,8 @@ import { GetAllBikesRequestDto } from 'src/shared/dtos/bike/bike-get-all-request
 import { BikeGetAllResponseDto } from 'src/shared/dtos/bike/bike-get-all-response.dto';
 import { BikeGetResponseDto } from 'src/shared/dtos/bike/bike-get-response.dto';
 import { BikeResponse } from 'src/shared/dtos/bike/bike-response.dto';
+import { BikeCreateRequestDto } from 'src/shared/dtos/bike/bike-create-request.dto';
+import { Bike } from '../entity/bike.entity';
 
 @Controller('bikes')
 @ApiTags('Bike Controller')
@@ -83,5 +86,18 @@ export class BikeController {
     @Body() insurance: InsuranceRequestDto,
   ): Promise<BikeInsuranceResponseDto> {
     return this.bikeService.updateBikeInsurance(bikeId, insuranceId, insurance);
+  }
+
+  @Post('/create')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('access-token')
+  @ApiBody({ type: BikeCreateRequestDto })
+  @ApiResponse({ status: HttpStatus.OK, type: Bike })
+  @ApiOperation({
+    summary: 'Patch a bike insurance by bike id',
+  })
+  public async createBike(@Body() body: BikeCreateRequestDto): Promise<Bike> {
+    return this.bikeService.createBike(body);
   }
 }

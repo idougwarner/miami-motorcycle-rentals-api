@@ -21,6 +21,9 @@ import { AppConstants } from './shared/common';
 import { BikeTypeModule } from './modules/bike-type/bike-type.module';
 import { BikeBrandModule } from './modules/bike-brand/bike-brand.module';
 import { ScriptModule } from './modules/script/script.module';
+import { BikeOffDayModule } from './modules/bike-off-day/bike-off-day.module';
+import { BikeBasePriceModule } from './modules/bike-base-price/bike-base-price.module';
+import { RelatedBikeModule } from './modules/related-bike/related-bike.module';
 
 @Module({
   imports: [
@@ -33,6 +36,9 @@ import { ScriptModule } from './modules/script/script.module';
     StripeModule,
     BikeRentalOrderModule,
     BikeInsurancePlanModule,
+    BikeOffDayModule,
+    BikeBasePriceModule,
+    RelatedBikeModule,
     WPMigrationModule,
     ScriptModule,
     TypeOrmModule.forRoot({
