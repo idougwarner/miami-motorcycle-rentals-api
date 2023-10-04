@@ -43,15 +43,18 @@ export enum MediaSize {
 
 export const MediaDimension = {
   Large: {
-    with: 1024,
+    mediaSize: MediaSize.Large,
+    width: 1024,
     height: 683,
   },
   Medium: {
-    with: 300,
+    mediaSize: MediaSize.Medium,
+    width: 300,
     height: 200,
   },
   MediumLarge: {
-    with: 768,
+    mediaSize: MediaSize.MediumLarge,
+    width: 768,
     height: 512,
   },
 };

@@ -25,6 +25,7 @@ import { BikeOffDayModule } from './modules/bike-off-day/bike-off-day.module';
 import { BikeBasePriceModule } from './modules/bike-base-price/bike-base-price.module';
 import { RelatedBikeModule } from './modules/related-bike/related-bike.module';
 import { MediaItemModule } from './modules/media-item/media-item.module';
+import { TransformedMediaItemModule } from './modules/transformed-media-item/transformed-media-item.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { MediaItemModule } from './modules/media-item/media-item.module';
     BikeBasePriceModule,
     RelatedBikeModule,
     MediaItemModule,
+    TransformedMediaItemModule,
     WPMigrationModule,
     ScriptModule,
     TypeOrmModule.forRoot({
