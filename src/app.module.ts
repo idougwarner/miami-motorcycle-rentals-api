@@ -24,6 +24,7 @@ import { ScriptModule } from './modules/script/script.module';
 import { BikeOffDayModule } from './modules/bike-off-day/bike-off-day.module';
 import { BikeBasePriceModule } from './modules/bike-base-price/bike-base-price.module';
 import { RelatedBikeModule } from './modules/related-bike/related-bike.module';
+import { MediaItemModule } from './modules/media-item/media-item.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { RelatedBikeModule } from './modules/related-bike/related-bike.module';
     BikeOffDayModule,
     BikeBasePriceModule,
     RelatedBikeModule,
+    MediaItemModule,
     WPMigrationModule,
     ScriptModule,
     TypeOrmModule.forRoot({

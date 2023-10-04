@@ -40,3 +40,18 @@ export enum MediaSize {
   Tablet = 'et-pb-image--responsive--tablet',
   Phone = 'et-pb-image--responsive--phone',
 }
+
+export const MediaDimension = {
+  Large: {
+    with: 1024,
+    height: 683,
+  },
+  Medium: {
+    with: 300,
+    height: 200,
+  },
+  MediumLarge: {
+    with: 768,
+    height: 512,
+  },
+};

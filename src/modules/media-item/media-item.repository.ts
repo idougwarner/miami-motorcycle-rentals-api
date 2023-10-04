@@ -14,9 +14,8 @@ export class MediaItemRepository {
     return this.mediaItemRepository.find();
   }
 
-  public async createInitialOrder(
-    initialOrder: MediaItem,
-  ): Promise<MediaItem> {
-    return await this.mediaItemRepository.save(initialOrder);
+  public async createMediaItem(data: Partial<MediaItem>): Promise<MediaItem> {
+    const mediaItem = this.mediaItemRepository.create(data);
+    return await this.mediaItemRepository.save(mediaItem);
   }
 }
