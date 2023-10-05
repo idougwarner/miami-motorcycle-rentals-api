@@ -9,6 +9,7 @@ import { BikeInsurancePlanModule } from '../bike-insurance-plan/bike-insurance-p
 import { BikeOffDayModule } from '../bike-off-day/bike-off-day.module';
 import { BikeBasePriceModule } from '../bike-base-price/bike-base-price.module';
 import { RelatedBikeModule } from '../related-bike/related-bike.module';
+import { BikeMediaItemModule } from '../bike-media-item/bike-media-item.module';
 @Module({
   imports: [
     HttpModule,
@@ -16,6 +17,7 @@ import { RelatedBikeModule } from '../related-bike/related-bike.module';
     BikeOffDayModule,
     BikeBasePriceModule,
     RelatedBikeModule,
+    BikeMediaItemModule,
     TypeOrmModule.forFeature([Bike]),
   ],
   providers: [BikeService, BikeRepository],

@@ -7,6 +7,7 @@ import { uploadFormDataFileToS3 } from 'src/shared/utils/uploadFileToS3';
 import { MediaTransformRequestDto } from 'src/shared/dtos/media/media-transform-request.dto';
 import { transformAndUploadToS3 } from 'src/shared/utils/transformAndUploadToS3';
 import { TransformedMediaItemService } from '../transformed-media-item/transformed-media-item.service';
+import { CreateImageDto } from 'src/shared/dtos/media/media-create-request.dto';
 
 @Injectable()
 export class MediaItemService {
@@ -16,55 +17,68 @@ export class MediaItemService {
   ) {}
 
   async create(
-    featureMediaItemPayload: Partial<MediaItem>,
-    galleryMediaItemsPayload: Partial<MediaItem>[],
+    featureMediaItemPayload: string,
+    galleryMediaItemsPayload: string,
     featuredImageFile: FileSystemStoredFile,
     galleryImageFiles: FileSystemStoredFile[],
   ): Promise<{ featuredMediaItem: MediaItem; galleryMediaItems: MediaItem[] }> {
     // create featured media item
-    const featuredImageUploadedData = await uploadFormDataFileToS3({
-      file: featuredImageFile,
-      fileName: featureMediaItemPayload.filename,
-    });
-    const {
-      uploadedFileUrl: featuredImageUrl,
-      fileSizeInKB: featuredImageSize,
-    } = featuredImageUploadedData;
-    const featuredMediaItem = await this.mediaItemRepository.createMediaItem({
-      ...featureMediaItemPayload,
-      filesize: featuredImageSize,
-      mediaUrl: featuredImageUrl,
-      mimeType: featuredImageFile['busBoyMimeType'],
-    });
+    let featuredMediaItem: MediaItem = null;
+    let galleryMediaItems: MediaItem[] = [];
+
+    if (featureMediaItemPayload) {
+      const featureMediaItemData: CreateImageDto = JSON.parse(
+        JSON.parse(featureMediaItemPayload),
+      );
+      const featuredImageUploadedData = await uploadFormDataFileToS3({
+        file: featuredImageFile,
+        fileName: featureMediaItemData.filename,
+      });
+      const {
+        uploadedFileUrl: featuredImageUrl,
+        fileSizeInKB: featuredImageSize,
+      } = featuredImageUploadedData;
+      featuredMediaItem = await this.mediaItemRepository.createMediaItem({
+        ...featureMediaItemData,
+        filesize: featuredImageSize,
+        mediaUrl: featuredImageUrl,
+        mimeType: featuredImageFile['busBoyMimeType'],
+      });
+    }
 
     // create gallery media items
-    const galleryImageUploadPromises = galleryImageFiles.map((file, index) =>
-      uploadFormDataFileToS3({
-        file,
-        fileName: galleryMediaItemsPayload[index].filename,
-        index,
-      }),
-    );
-    const galleryImagesUploadedData = await Promise.all(
-      galleryImageUploadPromises,
-    );
-    const galleryMediaItemsPromise = galleryImagesUploadedData.map(
-      async (data) => {
-        const {
-          uploadedFileUrl: galleryImageUrl,
-          fileSizeInKB: galleryImageSize,
+    if (galleryMediaItemsPayload) {
+      const galleryMediaItemsData: CreateImageDto[] = JSON.parse(
+        JSON.parse(galleryMediaItemsPayload),
+      );
+      const galleryImageUploadPromises = galleryImageFiles.map((file, index) =>
+        uploadFormDataFileToS3({
+          file,
+          fileName: galleryMediaItemsData[index].filename,
           index,
-        } = data;
+        }),
+      );
+      const galleryImagesUploadedData = await Promise.all(
+        galleryImageUploadPromises,
+      );
+      const galleryMediaItemsPromise = galleryImagesUploadedData.map(
+        async (data) => {
+          const {
+            uploadedFileUrl: galleryImageUrl,
+            fileSizeInKB: galleryImageSize,
+            index,
+          } = data;
 
-        return this.mediaItemRepository.createMediaItem({
-          ...galleryMediaItemsPayload[index],
-          filesize: galleryImageSize,
-          mediaUrl: galleryImageUrl,
-          mimeType: galleryImageFiles[index]['busBoyMimeType'],
-        });
-      },
-    );
-    const galleryMediaItems = await Promise.all(galleryMediaItemsPromise);
+          return this.mediaItemRepository.createMediaItem({
+            ...galleryMediaItemsData[index],
+            filesize: galleryImageSize,
+            mediaUrl: galleryImageUrl,
+            mimeType: galleryImageFiles[index]['busBoyMimeType'],
+          });
+        },
+      );
+      galleryMediaItems = await Promise.all(galleryMediaItemsPromise);
+    }
 
     return {
       featuredMediaItem,
@@ -73,42 +87,48 @@ export class MediaItemService {
   }
 
   async transformMediaItems(data: MediaTransformRequestDto) {
+    let transformedFeaturedImages = [];
+    let galleryFeaturedImages = [];
+
     // featured image transform
     const featuredImageURLData = data.featuredImage;
-    const featuredImageResponse = await axios.get(
-      featuredImageURLData.mediaUrl,
-      {
-        responseType: 'arraybuffer',
-      },
-    );
-    const featuredImageBuffer = Buffer.from(
-      featuredImageResponse.data,
-      'binary',
-    );
-    const transformedFeaturedImages = await transformAndUploadToS3(
-      featuredImageBuffer,
-      featuredImageURLData,
-    );
+    if (featuredImageURLData) {
+      const featuredImageResponse = await axios.get(
+        featuredImageURLData.mediaUrl,
+        {
+          responseType: 'arraybuffer',
+        },
+      );
+      const featuredImageBuffer = Buffer.from(
+        featuredImageResponse.data,
+        'binary',
+      );
+      transformedFeaturedImages = await transformAndUploadToS3(
+        featuredImageBuffer,
+        featuredImageURLData,
+      );
+    }
 
     // gallery images transform
     const galleryImagesURLData = data.galleryImages;
-    const galleryImagesTransformPromises = galleryImagesURLData.map(
-      async (galleryData) => {
-        const galleryImageResponse = await axios.get(galleryData.mediaUrl, {
-          responseType: 'arraybuffer',
-        });
-        const galleryImageBuffer = Buffer.from(
-          galleryImageResponse.data,
-          'binary',
-        );
+    if (galleryImagesURLData) {
+      const galleryImagesTransformPromises = galleryImagesURLData.map(
+        async (galleryData) => {
+          const galleryImageResponse = await axios.get(galleryData.mediaUrl, {
+            responseType: 'arraybuffer',
+          });
+          const galleryImageBuffer = Buffer.from(
+            galleryImageResponse.data,
+            'binary',
+          );
 
-        return transformAndUploadToS3(galleryImageBuffer, galleryData);
-      },
-    );
-    const galleryFeaturedImages = await Promise.all(
-      galleryImagesTransformPromises,
-    );
+          return transformAndUploadToS3(galleryImageBuffer, galleryData);
+        },
+      );
+      galleryFeaturedImages = await Promise.all(galleryImagesTransformPromises);
+    }
 
+    // save to db
     const flattenedGalleryFeaturedImages = galleryFeaturedImages.flat();
     const transformedImages = [
       ...transformedFeaturedImages,
@@ -131,5 +151,9 @@ export class MediaItemService {
     });
 
     return await Promise.all(transformedImagesPromise);
+  }
+
+  async getById(id: number): Promise<MediaItem> {
+    return this.mediaItemRepository.findById(id);
   }
 }

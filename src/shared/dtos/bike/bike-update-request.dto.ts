@@ -57,6 +57,10 @@ export class BikeUpdateRequestDto {
 
   @IsOptional()
   @IsArray()
+  galleryImageIds?: number[];
+
+  @IsOptional()
+  @IsArray()
   @ArrayNotEmpty()
   @ValidateNested({ each: true })
   @Type(() => OffDaysUpdateDto)

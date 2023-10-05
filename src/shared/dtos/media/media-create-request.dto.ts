@@ -41,17 +41,21 @@ export class CreateImageDto {
 }
 
 export class MediaCreateRequestDto {
-  featureImage: any;
+  @IsOptional()
+  featureImage?: any;
 
-  galleryImages: any;
+  @IsOptional()
+  galleryImages?: any;
 
+  @IsOptional()
   @IsFile()
   @MaxFileSize(1e6)
   @HasMimeType(['image/jpeg', 'image/png'])
-  featureImageFile: FileSystemStoredFile;
+  featureImageFile?: FileSystemStoredFile;
 
+  @IsOptional()
   @IsFiles()
   @MaxFileSize(1e6, { each: true })
   @HasMimeType(['image/jpeg', 'image/png'], { each: true })
-  galleryImageFiles: FileSystemStoredFile[];
+  galleryImageFiles?: FileSystemStoredFile[];
 }

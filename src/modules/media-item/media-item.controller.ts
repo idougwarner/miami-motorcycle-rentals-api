@@ -10,10 +10,7 @@ import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../guards/jwt-auth.guard';
 import { MediaItemService } from './media-item.service';
 import { MediaItem } from '../entity/media-item.entity';
-import {
-  CreateImageDto,
-  MediaCreateRequestDto,
-} from 'src/shared/dtos/media/media-create-request.dto';
+import { MediaCreateRequestDto } from 'src/shared/dtos/media/media-create-request.dto';
 import { FileSystemStoredFile, FormDataRequest } from 'nestjs-form-data';
 import { MediaTransformRequestDto } from 'src/shared/dtos/media/media-transform-request.dto';
 
@@ -31,21 +28,15 @@ export class MediaItemController {
   @ApiOperation({
     summary: 'Create media items',
   })
-  public async createBike(
+  public async createMedia(
     @Body() body: MediaCreateRequestDto,
   ): Promise<{ featuredMediaItem: MediaItem; galleryMediaItems: MediaItem[] }> {
-    const featureMediaItemData: CreateImageDto = JSON.parse(
-      JSON.parse(body.featureImage),
-    );
-    const galleryMediaItemsData: CreateImageDto[] = JSON.parse(
-      JSON.parse(body.galleryImages),
-    );
     const featuredImageFile = body.featureImageFile;
     const galleryImageFiles = body.galleryImageFiles;
 
     return await this.mediaItemService.create(
-      featureMediaItemData,
-      galleryMediaItemsData,
+      body.featureImage,
+      body.galleryImages,
       featuredImageFile,
       galleryImageFiles,
     );

@@ -4,6 +4,7 @@ import {
   IsArray,
   ArrayNotEmpty,
   ValidateNested,
+  IsOptional,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -27,13 +28,15 @@ export class RelatedBikesDto {
 }
 
 export class MediaTransformRequestDto {
+  @IsOptional()
   @ValidateNested()
   @Type(() => MediaURLDto)
-  featuredImage: MediaURLDto;
+  featuredImage?: MediaURLDto;
 
+  @IsOptional()
   @IsArray()
   @ArrayNotEmpty()
   @ValidateNested({ each: true })
   @Type(() => MediaURLDto)
-  galleryImages: MediaURLDto[];
+  galleryImages?: MediaURLDto[];
 }

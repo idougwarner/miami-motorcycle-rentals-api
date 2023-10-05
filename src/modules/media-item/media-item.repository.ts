@@ -18,4 +18,8 @@ export class MediaItemRepository {
     const mediaItem = this.mediaItemRepository.create(data);
     return await this.mediaItemRepository.save(mediaItem);
   }
+
+  async findById(id: number): Promise<MediaItem> {
+    return this.mediaItemRepository.findOne(id);
+  }
 }

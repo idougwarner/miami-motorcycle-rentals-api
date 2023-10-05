@@ -26,6 +26,7 @@ import { BikeBasePriceModule } from './modules/bike-base-price/bike-base-price.m
 import { RelatedBikeModule } from './modules/related-bike/related-bike.module';
 import { MediaItemModule } from './modules/media-item/media-item.module';
 import { TransformedMediaItemModule } from './modules/transformed-media-item/transformed-media-item.module';
+import { BikeMediaItemModule } from './modules/bike-media-item/bike-media-item.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { TransformedMediaItemModule } from './modules/transformed-media-item/tra
     BikeInsurancePlanModule,
     BikeOffDayModule,
     BikeBasePriceModule,
+    BikeMediaItemModule,
     RelatedBikeModule,
     MediaItemModule,
     TransformedMediaItemModule,

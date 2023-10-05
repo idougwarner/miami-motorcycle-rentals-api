@@ -5,8 +5,9 @@ import { HttpModule } from '@nestjs/axios';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BikeBrandRepository } from './bike-brand.repository';
 import { BikeBrand } from '../entity/bike-brands.entity';
+import { MediaItemModule } from '../media-item/media-item.module';
 @Module({
-  imports: [HttpModule, TypeOrmModule.forFeature([BikeBrand])],
+  imports: [HttpModule, MediaItemModule, TypeOrmModule.forFeature([BikeBrand])],
   providers: [BikeBrandService, BikeBrandRepository],
   controllers: [BikeBrandController],
   exports: [BikeBrandService],

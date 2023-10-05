@@ -20,6 +20,9 @@ import { BikeOffDayService } from '../bike-off-day/bike-off-day.service';
 import { BikeBasePriceService } from '../bike-base-price/bike-base-price.service';
 import { RelatedBikeService } from '../related-bike/related-bike.service';
 import { BikeUpdateRequestDto } from 'src/shared/dtos/bike/bike-update-request.dto';
+import { BikeMediaItemService } from '../bike-media-item/bike-media-item.service';
+import { BikePositionUpdateRequestDto } from 'src/shared/dtos/bike/bike-position-update.dto';
+import { MediaItemService } from '../media-item/media-item.service';
 @Injectable()
 export class BikeService {
   miamiBikeWpUrl = environment.wpJsonBaseUrl;
@@ -31,6 +34,7 @@ export class BikeService {
     private bikeOffDayService: BikeOffDayService,
     private bikeBasePriceService: BikeBasePriceService,
     private relatedBikeService: RelatedBikeService,
+    private bikeMediaItemService: BikeMediaItemService,
   ) {}
 
   async findAll(
@@ -155,10 +159,18 @@ export class BikeService {
       seoDescription: '',
     });
 
+    const galleryImageIds = bikeData.galleryImageIds;
     const offDaysData = bikeData.offDays;
     const basePricesData = bikeData.basePrices;
     const relatedBikesData = bikeData.relatedBikes;
     const insurancesData = bikeData.insurancePlans;
+
+    for (const imageId of galleryImageIds) {
+      await this.bikeMediaItemService.createBikeMediaItem({
+        bikeId: newBike.id,
+        mediaItemId: imageId,
+      });
+    }
 
     for (const offDayData of offDaysData) {
       await this.bikeOffDayService.createBikeOffDay({
@@ -203,6 +215,18 @@ export class BikeService {
     await this.bikeRepository.saveBike(existingBike);
 
     // Update related entities
+
+    // Update bikeMediaItems
+    const galleryImageIds = bikeData.galleryImageIds;
+    // Delete old bike-media-item records
+    await this.bikeMediaItemService.deleteByBikeId(bikeId);
+    // Create new bike-media-item records
+    for (const imageId of galleryImageIds) {
+      await this.bikeMediaItemService.createBikeMediaItem({
+        bikeId,
+        mediaItemId: imageId,
+      });
+    }
 
     // Update off-days
     for (const offDayData of bikeData.offDays) {
@@ -268,5 +292,21 @@ export class BikeService {
     }
 
     return existingBike;
+  }
+
+  async updateBikePositions(bikePositions: BikePositionUpdateRequestDto[]) {
+    const updatedRecords = await Promise.all(
+      bikePositions.map(async (bikePosition) => {
+        const bike = await this.bikeRepository.find(bikePosition.bikeId, {});
+        bike.position = bikePosition.position;
+        return this.bikeRepository.saveBike(bike);
+      }),
+    );
+    return {
+      message: 'Positions updated successfully',
+      data: {
+        updatedRecords: updatedRecords.length,
+      },
+    };
   }
 }

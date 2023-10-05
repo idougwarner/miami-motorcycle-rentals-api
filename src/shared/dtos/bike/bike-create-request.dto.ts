@@ -144,6 +144,9 @@ export class BikeCreateRequestDto {
   bike: BikeDto;
 
   @IsArray()
+  galleryImageIds: number[];
+
+  @IsArray()
   @ArrayNotEmpty()
   @ValidateNested({ each: true })
   @Type(() => OffDaysDto)

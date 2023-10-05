@@ -36,6 +36,7 @@ export class BikeRepository {
       )
       .where(where)
       .orderBy('bike.discountPrice', 'DESC')
+      .orderBy('bike.position', 'ASC')
       .getMany();
   }
 

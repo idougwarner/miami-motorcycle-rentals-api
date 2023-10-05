@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -29,6 +30,8 @@ import { BikeGetResponseDto } from 'src/shared/dtos/bike/bike-get-response.dto';
 import { BikeResponse } from 'src/shared/dtos/bike/bike-response.dto';
 import { BikeCreateRequestDto } from 'src/shared/dtos/bike/bike-create-request.dto';
 import { Bike } from '../entity/bike.entity';
+import { BikeUpdateRequestDto } from 'src/shared/dtos/bike/bike-update-request.dto';
+import { BikePositionUpdateRequestDto } from 'src/shared/dtos/bike/bike-position-update.dto';
 
 @Controller('bikes')
 @ApiTags('Bike Controller')
@@ -99,5 +102,32 @@ export class BikeController {
   })
   public async createBike(@Body() body: BikeCreateRequestDto): Promise<Bike> {
     return this.bikeService.createBike(body);
+  }
+
+  @Put('/:id')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('access-token')
+  @ApiBody({ type: BikeUpdateRequestDto })
+  @ApiResponse({ status: HttpStatus.OK, type: Bike })
+  @ApiOperation({ summary: 'Update a bike by id' })
+  public async updateBike(
+    @Param('id') id: number,
+    @Body() bikeData: BikeUpdateRequestDto,
+  ): Promise<Bike> {
+    return this.bikeService.updateBike(id, bikeData);
+  }
+
+  @Put('/position/update')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('access-token')
+  @ApiBody({ type: [BikePositionUpdateRequestDto] })
+  @ApiResponse({ status: HttpStatus.OK })
+  @ApiOperation({ summary: 'Update bike positions' })
+  public async updateBikePositions(
+    @Body() bikePositions: BikePositionUpdateRequestDto[],
+  ) {
+    return this.bikeService.updateBikePositions(bikePositions);
   }
 }

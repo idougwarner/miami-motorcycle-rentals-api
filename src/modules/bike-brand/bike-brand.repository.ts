@@ -20,4 +20,13 @@ export class BikeBrandRepository {
   async find(id: number): Promise<BikeBrand> {
     return this.bikeBrandRepository.findOne(id, { relations: ['mediaItem'] });
   }
+
+  async create(data: Partial<BikeBrand>) {
+    const brand = this.bikeBrandRepository.create(data);
+    return await this.save(brand);
+  }
+
+  async save(data: BikeBrand) {
+    return await this.bikeBrandRepository.save(data);
+  }
 }
