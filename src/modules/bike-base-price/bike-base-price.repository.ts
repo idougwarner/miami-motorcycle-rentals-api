@@ -15,4 +15,12 @@ export class BikeBasePriceRepository {
     const basePrice = this.basePriceRepository.create(data);
     return await this.basePriceRepository.save(basePrice);
   }
+
+  async findOne(id: number) {
+    return await this.basePriceRepository.findOne(id);
+  }
+
+  async save(data: BikeBasePrice) {
+    return await this.basePriceRepository.save(data);
+  }
 }

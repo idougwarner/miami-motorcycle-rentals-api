@@ -13,4 +13,12 @@ export class BikeOffDayRepository {
     const offDays = this.offDayRepository.create(bikeData);
     return await this.offDayRepository.save(offDays);
   }
+
+  async findOne(id: number) {
+    return await this.offDayRepository.findOne(id);
+  }
+
+  async save(data: BikeOffDay) {
+    return await this.offDayRepository.save(data);
+  }
 }

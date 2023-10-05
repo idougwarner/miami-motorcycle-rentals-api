@@ -46,4 +46,24 @@ export class BikeInsurancePlanService {
   async createInsurancePlan(data: Partial<BikeInsurancePlan>) {
     await this.bikeInsurancePlanRepository.saveInsurance(data);
   }
+
+  async updateInsurancePlan(
+    insurancePlanId: number,
+    updateData: Partial<BikeInsurancePlan>,
+  ): Promise<any> {
+    try {
+      const insurancePlan =
+        await this.bikeInsurancePlanRepository.getBikeInsurancePlanById(
+          insurancePlanId,
+        );
+      if (!insurancePlan) {
+        throw new Error('Insurance plan not found');
+      }
+      Object.assign(insurancePlan, updateData);
+      return await this.bikeInsurancePlanRepository.save(insurancePlan);
+    } catch (error) {
+      // Handle error appropriately for your application
+      console.error(error);
+    }
+  }
 }

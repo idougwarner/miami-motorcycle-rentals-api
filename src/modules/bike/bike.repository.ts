@@ -51,4 +51,8 @@ export class BikeRepository {
     const bike = this.bikeRepository.create(bikeData);
     return this.bikeRepository.save(bike);
   }
+
+  async saveBike(bikeData: Bike) {
+    return await this.bikeRepository.save(bikeData);
+  }
 }

@@ -11,4 +11,21 @@ export class BikeBasePriceService {
   ): Promise<BikeBasePrice> {
     return await this.bikeBasePriceRepository.createBikeBasePrice(data);
   }
+
+  async updateBikeBasePrice(
+    basePriceId: number,
+    updateData: Partial<BikeBasePrice>,
+  ): Promise<any> {
+    try {
+      const basePrice = await this.bikeBasePriceRepository.findOne(basePriceId);
+      if (!basePrice) {
+        throw new Error('Base price not found');
+      }
+      Object.assign(basePrice, updateData);
+      return await this.bikeBasePriceRepository.save(basePrice);
+    } catch (error) {
+      // Handle error appropriately for your application
+      console.error(error);
+    }
+  }
 }

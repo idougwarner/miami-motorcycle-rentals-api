@@ -13,4 +13,12 @@ export class RelatedBikeRepository {
     const relatedBike = this.relatedBikeRepository.create(data);
     return await this.relatedBikeRepository.save(relatedBike);
   }
+
+  async findOne(id: number) {
+    return await this.relatedBikeRepository.findOne(id);
+  }
+
+  async save(data: RelatedBike) {
+    return await this.relatedBikeRepository.save(data);
+  }
 }

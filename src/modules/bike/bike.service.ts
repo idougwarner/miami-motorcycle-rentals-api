@@ -1,7 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { environment } from '../../environments/environment';
 import { HttpService } from '@nestjs/axios';
-import { firstValueFrom } from 'rxjs';
 import {
   BikeInsuranceResponseDto,
   InsuranceRequestDto,
@@ -20,6 +19,7 @@ import { BikeCreateRequestDto } from 'src/shared/dtos/bike/bike-create-request.d
 import { BikeOffDayService } from '../bike-off-day/bike-off-day.service';
 import { BikeBasePriceService } from '../bike-base-price/bike-base-price.service';
 import { RelatedBikeService } from '../related-bike/related-bike.service';
+import { BikeUpdateRequestDto } from 'src/shared/dtos/bike/bike-update-request.dto';
 @Injectable()
 export class BikeService {
   miamiBikeWpUrl = environment.wpJsonBaseUrl;
@@ -189,5 +189,84 @@ export class BikeService {
     }
 
     return newBike;
+  }
+
+  async updateBike(bikeId: number, bikeData: BikeUpdateRequestDto) {
+    // Find existing bike
+    const existingBike = await this.bikeRepository.find(bikeId, {});
+
+    if (!existingBike) {
+      throw new NotFoundException(`Bike with id ${bikeId} not found`);
+    }
+    // Update bike details
+    Object.assign(existingBike, bikeData.bike);
+    await this.bikeRepository.saveBike(existingBike);
+
+    // Update related entities
+
+    // Update off-days
+    for (const offDayData of bikeData.offDays) {
+      if (offDayData.id) {
+        await this.bikeOffDayService.updateBikeOffDay(offDayData.id, {
+          ...offDayData,
+          bike: existingBike,
+        });
+      } else {
+        await this.bikeOffDayService.createBikeOffDay({
+          ...offDayData,
+          bike: existingBike,
+        });
+      }
+    }
+
+    // Update base prices
+    for (const basePriceData of bikeData.basePrices) {
+      if (basePriceData.id) {
+        await this.bikeBasePriceService.updateBikeBasePrice(basePriceData.id, {
+          ...basePriceData,
+          bike: existingBike,
+        });
+      } else {
+        await this.bikeBasePriceService.createBikeBasePrice({
+          ...basePriceData,
+          bike: existingBike,
+        });
+      }
+    }
+
+    // Update insurance plans
+    for (const insuranceData of bikeData.insurancePlans) {
+      if (insuranceData.id) {
+        await this.bikeInsurancePlanService.updateInsurancePlan(
+          insuranceData.id,
+          {
+            ...insuranceData,
+            bike: existingBike,
+          },
+        );
+      } else {
+        await this.bikeInsurancePlanService.createInsurancePlan({
+          ...insuranceData,
+          bike: existingBike,
+        });
+      }
+    }
+
+    // Update related bikes
+    for (const relatedBikeData of bikeData.relatedBikes) {
+      if (relatedBikeData.id) {
+        await this.relatedBikeService.updateRelatedBike(relatedBikeData.id, {
+          ...relatedBikeData,
+          bikeId: existingBike.id,
+        });
+      } else {
+        await this.relatedBikeService.createRelatedBike({
+          ...relatedBikeData,
+          bikeId: existingBike.id,
+        });
+      }
+    }
+
+    return existingBike;
   }
 }

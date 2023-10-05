@@ -9,4 +9,23 @@ export class RelatedBikeService {
   async createRelatedBike(data: Partial<RelatedBike>): Promise<RelatedBike> {
     return await this.relatedBikeRepository.createRelatedBike(data);
   }
+
+  async updateRelatedBike(
+    relatedBikeId: number,
+    updateData: Partial<RelatedBike>,
+  ): Promise<any> {
+    try {
+      const relatedBike = await this.relatedBikeRepository.findOne(
+        relatedBikeId,
+      );
+      if (!relatedBike) {
+        throw new Error('Related bike not found');
+      }
+      Object.assign(relatedBike, updateData);
+      return await this.relatedBikeRepository.save(relatedBike);
+    } catch (error) {
+      // Handle error appropriately for your application
+      console.error(error);
+    }
+  }
 }

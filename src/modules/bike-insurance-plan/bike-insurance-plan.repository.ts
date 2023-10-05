@@ -41,4 +41,8 @@ export class BikeInsurancePlanRepository {
       relations: ['bike'],
     });
   }
+
+  async save(data: BikeInsurancePlan) {
+    return await this.bikeInsurancePlanRepository.save(data);
+  }
 }
