@@ -62,4 +62,29 @@ export class BikeGetAllResponseDto extends BaseResponseDto {
     return bike?.obj?.featuredMediaItem?.transformedMediaItems?.[0];
   })
   featuredMediaItem: MediaItem;
+
+  @ApiResponseProperty()
+  @Expose()
+  @Transform((bike: { obj: Bike }) => {
+    return bike?.obj?.bikeBasePrices?.length;
+  })
+  bikeBasePriceCount: number;
+
+  @ApiResponseProperty()
+  @Expose()
+  @Transform((bike: { obj: Bike }) => {
+    return bike?.obj?.insurances?.length;
+  })
+  insuranceCount: number;
+
+  @ApiResponseProperty()
+  @Expose()
+  @Transform((bike: { obj: Bike }) => {
+    return bike?.obj?.rentalOrders?.length;
+  })
+  rentalOrderCount: number;
+
+  @ApiResponseProperty()
+  @Expose()
+  position: number;
 }

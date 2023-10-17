@@ -28,7 +28,7 @@ export class MediaItemService {
 
     if (featureMediaItemPayload) {
       const featureMediaItemData: CreateImageDto = JSON.parse(
-        JSON.parse(featureMediaItemPayload),
+        featureMediaItemPayload,
       );
       const featuredImageUploadedData = await uploadFormDataFileToS3({
         file: featuredImageFile,
@@ -49,7 +49,7 @@ export class MediaItemService {
     // create gallery media items
     if (galleryMediaItemsPayload) {
       const galleryMediaItemsData: CreateImageDto[] = JSON.parse(
-        JSON.parse(galleryMediaItemsPayload),
+        galleryMediaItemsPayload,
       );
       const galleryImageUploadPromises = galleryImageFiles.map((file, index) =>
         uploadFormDataFileToS3({

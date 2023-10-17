@@ -18,7 +18,7 @@ export class BikeBrandCreateResponseDto extends BaseResponseDto {
 
   @ApiResponseProperty()
   @Expose()
-  status: BikeStatus;
+  isPopular: boolean;
 
   @ApiResponseProperty()
   @Expose()

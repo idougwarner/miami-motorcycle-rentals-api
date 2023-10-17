@@ -1,10 +1,11 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { IntegerTransformer } from '../../core/transformer/integer-transformer';
-import { InsuranceEnum, OrderStatusEnum } from '../../shared/common';
+import { OrderStatusEnum } from '../../shared/common';
 import { BikeRentalBase } from './base.entity';
 import { BikeAccessoryOrder } from './bike-accessory-order.entity';
 import { BikeInsurancePlan } from './bike-insurance-plan.entity';
 import { User } from './user.entity';
+import { Bike } from './bike.entity';
 
 @Entity({ name: 'bike_rental_orders' })
 export class BikeRentalOrder extends BikeRentalBase {
@@ -149,8 +150,16 @@ export class BikeRentalOrder extends BikeRentalBase {
   @JoinColumn({ name: 'insurance_id' })
   bikeInsurancePlan: BikeInsurancePlan;
 
-  @OneToMany(() => BikeAccessoryOrder, (accessory) => accessory.bikeRentalOrder, {
-    cascade: ['insert'],
-  })
+  @OneToMany(
+    () => BikeAccessoryOrder,
+    (accessory) => accessory.bikeRentalOrder,
+    {
+      cascade: ['insert'],
+    },
+  )
   accessories: BikeAccessoryOrder[];
+
+  @ManyToOne(() => Bike, { nullable: true })
+  @JoinColumn({ name: 'bike_id' })
+  bike: Bike;
 }

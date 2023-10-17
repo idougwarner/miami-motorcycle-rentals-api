@@ -42,8 +42,8 @@ export class BikeDto {
   @IsInt()
   discountPrice: number;
 
-  @IsNumber()
-  discountPercentage: number;
+  @IsString()
+  discountPercentage: string;
 
   @IsString()
   @MaxLength(255)

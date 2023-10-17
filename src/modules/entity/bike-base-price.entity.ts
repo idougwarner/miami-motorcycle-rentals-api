@@ -25,6 +25,9 @@ export class BikeBasePrice extends BikeRentalBase {
   @Column({ type: 'int', name: 'price_per_day' })
   pricePerDay: number;
 
+  @Column({ type: 'int', name: 'bike_id' })
+  bikeId: number;
+
   @ManyToOne(() => Bike, (bike) => bike.bikeBasePrices)
   @JoinColumn({ name: 'bike_id', referencedColumnName: 'id' })
   bike: Bike;

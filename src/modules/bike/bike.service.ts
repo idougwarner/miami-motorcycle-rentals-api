@@ -69,6 +69,9 @@ export class BikeService {
         'brand',
         'featuredMediaItem',
         'featuredMediaItem.transformedMediaItems',
+        'bikeOffDays',
+        'bikeBasePrices',
+        'relatedBikes',
       ],
     });
     if (!bike) {
@@ -216,26 +219,25 @@ export class BikeService {
 
     // Update related entities
 
-    // Update bikeMediaItems
+    // Update bikeMediaItems: should send full galleryIds(updated&not updated) or blank array if no updates
     const galleryImageIds = bikeData.galleryImageIds;
-    // Delete old bike-media-item records
-    await this.bikeMediaItemService.deleteByBikeId(bikeId);
-    // Create new bike-media-item records
-    for (const imageId of galleryImageIds) {
-      await this.bikeMediaItemService.createBikeMediaItem({
-        bikeId,
-        mediaItemId: imageId,
-      });
+    if (galleryImageIds.length) {
+      // Delete old bike-media-item records
+      await this.bikeMediaItemService.deleteByBikeId(bikeId);
+      // Create new bike-media-item records
+      for (const imageId of galleryImageIds) {
+        await this.bikeMediaItemService.createBikeMediaItem({
+          bikeId,
+          mediaItemId: imageId,
+        });
+      }
     }
 
     // Update off-days
-    for (const offDayData of bikeData.offDays) {
-      if (offDayData.id) {
-        await this.bikeOffDayService.updateBikeOffDay(offDayData.id, {
-          ...offDayData,
-          bike: existingBike,
-        });
-      } else {
+    if (bikeData.offDays.length) {
+      await this.bikeOffDayService.deleteByBikeId(bikeId);
+
+      for (const offDayData of bikeData.offDays) {
         await this.bikeOffDayService.createBikeOffDay({
           ...offDayData,
           bike: existingBike,
@@ -244,13 +246,10 @@ export class BikeService {
     }
 
     // Update base prices
-    for (const basePriceData of bikeData.basePrices) {
-      if (basePriceData.id) {
-        await this.bikeBasePriceService.updateBikeBasePrice(basePriceData.id, {
-          ...basePriceData,
-          bike: existingBike,
-        });
-      } else {
+    if (bikeData.basePrices.length) {
+      await this.bikeBasePriceService.deleteByBikeId(bikeId);
+
+      for (const basePriceData of bikeData.basePrices) {
         await this.bikeBasePriceService.createBikeBasePrice({
           ...basePriceData,
           bike: existingBike,
@@ -277,13 +276,10 @@ export class BikeService {
     }
 
     // Update related bikes
-    for (const relatedBikeData of bikeData.relatedBikes) {
-      if (relatedBikeData.id) {
-        await this.relatedBikeService.updateRelatedBike(relatedBikeData.id, {
-          ...relatedBikeData,
-          bikeId: existingBike.id,
-        });
-      } else {
+    if (bikeData.relatedBikes.length) {
+      await this.relatedBikeService.deleteByBikeId(bikeId);
+
+      for (const relatedBikeData of bikeData.relatedBikes) {
         await this.relatedBikeService.createRelatedBike({
           ...relatedBikeData,
           bikeId: existingBike.id,

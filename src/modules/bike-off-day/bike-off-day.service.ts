@@ -25,4 +25,8 @@ export class BikeOffDayService {
       console.error(error);
     }
   }
+
+  async deleteByBikeId(bikeId: number) {
+    await this.bikeOffDayRepository.deleteByBikeId(bikeId);
+  }
 }

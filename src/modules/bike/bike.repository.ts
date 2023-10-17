@@ -28,6 +28,9 @@ export class BikeRepository {
       .createQueryBuilder('bike')
       .leftJoinAndSelect('bike.brand', 'brand')
       .leftJoinAndSelect('bike.featuredMediaItem', 'featuredMediaItem')
+      .leftJoinAndSelect('bike.bikeBasePrices', 'bikeBasePrices')
+      .leftJoinAndSelect('bike.insurances', 'insurances')
+      .leftJoinAndSelect('bike.rentalOrders', 'rentalOrders')
       .leftJoinAndSelect(
         'featuredMediaItem.transformedMediaItems',
         'transformedMediaItem',

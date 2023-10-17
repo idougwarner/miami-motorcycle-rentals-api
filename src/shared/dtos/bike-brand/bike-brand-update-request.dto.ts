@@ -1,5 +1,4 @@
-import { IsEnum, IsInt, IsString, MaxLength } from 'class-validator';
-import { BikeStatus } from 'src/shared/common';
+import { IsBoolean, IsInt, IsString, MaxLength } from 'class-validator';
 
 export class BikeBrandUpdateRequestDto {
   @IsString()
@@ -13,8 +12,8 @@ export class BikeBrandUpdateRequestDto {
   @IsInt()
   mediaItemId: number;
 
-  @IsEnum(BikeStatus)
-  status: BikeStatus;
+  @IsBoolean()
+  isPopular: boolean;
 
   @IsString()
   revision: string;

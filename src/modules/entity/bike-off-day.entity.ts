@@ -19,6 +19,9 @@ export class BikeOffDay extends BikeRentalBase {
   @Column({ type: 'varchar', length: 255 })
   description: string;
 
+  @Column({ type: 'int', name: 'bike_id' })
+  bikeId: number;
+
   @ManyToOne(() => Bike, (bike) => bike.bikeOffDays)
   @JoinColumn({ name: 'bike_id', referencedColumnName: 'id' })
   bike: Bike;

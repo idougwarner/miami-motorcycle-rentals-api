@@ -1,10 +1,13 @@
 import { ApiResponseProperty } from '@nestjs/swagger';
-import { Expose, Transform, Type } from 'class-transformer';
+import { Expose, Transform } from 'class-transformer';
 import { BaseResponseDto } from '..';
 import { BikeBrand } from 'src/modules/entity/bike-brands.entity';
 import { MediaItem } from 'src/modules/entity/media-item.entity';
 import { Bike } from 'src/modules/entity/bike.entity';
 import { parseWpAttachmentMetadata } from 'src/shared/utils/parseWpAttachmentMetadata';
+import { BikeOffDay } from 'src/modules/entity/bike-off-day.entity';
+import { BikeBasePrice } from 'src/modules/entity/bike-base-price.entity';
+import { RelatedBike } from 'src/modules/entity/related-bike.entity';
 
 export class BikeGetResponseDto extends BaseResponseDto {
   @ApiResponseProperty()
@@ -104,4 +107,37 @@ export class BikeGetResponseDto extends BaseResponseDto {
   @Expose()
   @Transform((bike) => parseWpAttachmentMetadata(bike?.obj?.extras))
   extras;
+
+  @ApiResponseProperty()
+  @Expose()
+  status: string;
+
+  @ApiResponseProperty()
+  @Expose()
+  discountPercentage: string;
+
+  @ApiResponseProperty()
+  @Expose()
+  position: number;
+
+  @ApiResponseProperty({ type: [BikeOffDay] })
+  @Expose()
+  @Transform((bike: { obj: Bike }) => {
+    return bike?.obj?.bikeOffDays;
+  })
+  bikeOffDays: BikeOffDay[];
+
+  @ApiResponseProperty({ type: [BikeBasePrice] })
+  @Expose()
+  @Transform((bike: { obj: Bike }) => {
+    return bike?.obj?.bikeBasePrices;
+  })
+  bikeBasePrices: BikeBasePrice[];
+
+  @ApiResponseProperty({ type: [RelatedBike] })
+  @Expose()
+  @Transform((bike: { obj: Bike }) => {
+    return bike?.obj?.relatedBikes;
+  })
+  relatedBikes: RelatedBike[];
 }

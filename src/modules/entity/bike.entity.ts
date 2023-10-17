@@ -15,6 +15,7 @@ import { BikeBrand } from './bike-brands.entity';
 import { BikeOffDay } from './bike-off-day.entity';
 import { BikeBasePrice } from './bike-base-price.entity';
 import { RelatedBike } from './related-bike.entity';
+import { BikeRentalOrder } from './bike-rental-order.entity';
 
 @Entity({ name: 'bikes' })
 export class Bike extends BikeRentalBase {
@@ -106,7 +107,7 @@ export class Bike extends BikeRentalBase {
     nullable: false,
     name: 'discount_percentage',
   })
-  discountPercentage: number;
+  discountPercentage: string;
 
   @Column({
     nullable: false,
@@ -118,6 +119,11 @@ export class Bike extends BikeRentalBase {
     cascade: ['insert', 'update', 'remove'],
   })
   insurances?: BikeInsurancePlan[];
+
+  @OneToMany(() => BikeRentalOrder, (rentalOrder) => rentalOrder.bike, {
+    cascade: ['insert', 'update', 'remove'],
+  })
+  rentalOrders?: BikeRentalOrder[];
 
   @ManyToMany(() => MediaItem, (mediaItem) => mediaItem.bikes)
   @JoinTable({

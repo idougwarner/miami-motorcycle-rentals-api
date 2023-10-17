@@ -28,4 +28,8 @@ export class BikeBasePriceService {
       console.error(error);
     }
   }
+
+  async deleteByBikeId(bikeId: number) {
+    return await this.bikeBasePriceRepository.deleteByBikeId(bikeId);
+  }
 }

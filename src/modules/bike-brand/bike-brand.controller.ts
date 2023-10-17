@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -32,8 +33,11 @@ export class BikeBrandController {
   @HttpCode(HttpStatus.OK)
   @ApiResponse({ status: HttpStatus.OK, type: [BikeBrandGetResponseDto] })
   @ApiOperation({ summary: 'Get all brands' })
-  public async getAll(): Promise<BikeBrandGetResponseDto[]> {
-    return this.bikeBrandService.getAll();
+  public async getAll(
+    @Query() params: { isAll: number },
+  ): Promise<BikeBrandGetResponseDto[]> {
+    const { isAll = 0 } = params;
+    return this.bikeBrandService.getAll(isAll);
   }
 
   @Get('/:id')

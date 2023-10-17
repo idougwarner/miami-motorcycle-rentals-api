@@ -22,7 +22,7 @@ export class BikeBrandUpdateResponseDto extends BaseResponseDto {
 
   @ApiResponseProperty()
   @Expose()
-  status: BikeStatus;
+  status: boolean;
 
   @ApiResponseProperty()
   @Expose()

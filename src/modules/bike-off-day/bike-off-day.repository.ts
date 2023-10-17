@@ -21,4 +21,8 @@ export class BikeOffDayRepository {
   async save(data: BikeOffDay) {
     return await this.offDayRepository.save(data);
   }
+
+  async deleteByBikeId(bikeId: number) {
+    await this.offDayRepository.delete({ bikeId });
+  }
 }

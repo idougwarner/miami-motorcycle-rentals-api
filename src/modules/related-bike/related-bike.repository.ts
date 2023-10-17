@@ -21,4 +21,8 @@ export class RelatedBikeRepository {
   async save(data: RelatedBike) {
     return await this.relatedBikeRepository.save(data);
   }
+
+  async deleteByBikeId(bikeId: number) {
+    return await this.relatedBikeRepository.delete({ bikeId });
+  }
 }

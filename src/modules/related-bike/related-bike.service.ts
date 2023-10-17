@@ -28,4 +28,8 @@ export class RelatedBikeService {
       console.error(error);
     }
   }
+
+  async deleteByBikeId(bikeId: number) {
+    return await this.relatedBikeRepository.deleteByBikeId(bikeId);
+  }
 }

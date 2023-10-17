@@ -5,6 +5,7 @@ import { BikeRentalBase } from './base.entity';
 @Entity('related_bikes')
 export class RelatedBike extends BikeRentalBase {
   @Column({
+    type: 'int',
     nullable: false,
     name: 'bike_id',
   })

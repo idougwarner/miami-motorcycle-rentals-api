@@ -37,4 +37,8 @@ export class BikeBrandGetResponseDto extends BaseResponseDto {
   @ApiResponseProperty()
   @Expose()
   revision: string;
+
+  @ApiResponseProperty()
+  @Expose()
+  isPopular: string;
 }

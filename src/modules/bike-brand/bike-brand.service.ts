@@ -14,10 +14,14 @@ export class BikeBrandService {
     private mediaItemService: MediaItemService,
   ) {}
 
-  async getAll(): Promise<BikeBrandGetResponseDto[]> {
-    const bikeBrands = await this.bikeBrandRepository.findAll({
-      isPopular: true,
-    });
+  async getAll(isAll: number): Promise<BikeBrandGetResponseDto[]> {
+    const bikeBrands = await this.bikeBrandRepository.findAll(
+      isAll
+        ? {}
+        : {
+            isPopular: true,
+          },
+    );
     if (!bikeBrands || bikeBrands?.length === 0) {
       throw new NotFoundException('Brands not found');
     }

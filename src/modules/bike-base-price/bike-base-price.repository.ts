@@ -23,4 +23,8 @@ export class BikeBasePriceRepository {
   async save(data: BikeBasePrice) {
     return await this.basePriceRepository.save(data);
   }
+
+  async deleteByBikeId(bikeId: number) {
+    return await this.basePriceRepository.delete({ bikeId });
+  }
 }
