@@ -78,9 +78,17 @@ export class BikeService {
       throw new NotFoundException('Bike not found');
     }
 
-    return plainToInstance(BikeGetResponseDto, bike, {
-      excludeExtraneousValues: true,
-    });
+    const bikeWithRelatedBikes = await this.bikeRepository.findRelatedBikes(
+      bike.id,
+    );
+
+    return plainToInstance(
+      BikeGetResponseDto,
+      { ...bike, relatedBikes: bikeWithRelatedBikes.relatedBikes },
+      {
+        excludeExtraneousValues: true,
+      },
+    );
   }
 
   async getBikeWithInsurancesById(id: number): Promise<BikeResponse> {

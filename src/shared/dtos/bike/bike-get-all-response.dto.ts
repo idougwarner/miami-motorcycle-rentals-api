@@ -45,6 +45,10 @@ export class BikeGetAllResponseDto extends BaseResponseDto {
 
   @ApiResponseProperty()
   @Expose()
+  discountPercentage: string;
+
+  @ApiResponseProperty()
+  @Expose()
   featuredMediaItemId: number;
 
   @ApiResponseProperty()

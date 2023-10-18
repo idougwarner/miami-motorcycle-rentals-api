@@ -38,13 +38,26 @@ export class BikeRepository {
         { mediaSize: mediaSize },
       )
       .where(where)
-      .orderBy('bike.discountPrice', 'DESC')
+      .orderBy('bike.regularPrice', 'DESC')
       .orderBy('bike.position', 'ASC')
       .getMany();
   }
 
   async find(id: number, options: { relations?: string[] }): Promise<Bike> {
     return this.bikeRepository.findOne(id, options);
+  }
+
+  async findRelatedBikes(bikeId: number) {
+    return this.bikeRepository.findOne(bikeId, {
+      relations: [
+        'relatedBikes',
+        'relatedBikes.relatedBike',
+        'relatedBikes.relatedBike.featuredMediaItem',
+        'relatedBikes.relatedBike.brand',
+        'bikesRelatedTo',
+        'bikesRelatedTo.bike',
+      ],
+    });
   }
 
   async getMediaItemsById(id: number) {
