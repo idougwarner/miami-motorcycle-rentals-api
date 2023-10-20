@@ -147,13 +147,11 @@ export class BikeCreateRequestDto {
   galleryImageIds: number[];
 
   @IsArray()
-  @ArrayNotEmpty()
   @ValidateNested({ each: true })
   @Type(() => OffDaysDto)
   offDays: OffDaysDto[];
 
   @IsArray()
-  @ArrayNotEmpty()
   @ValidateNested({ each: true })
   @Type(() => BasePricesDto)
   basePrices: BasePricesDto[];

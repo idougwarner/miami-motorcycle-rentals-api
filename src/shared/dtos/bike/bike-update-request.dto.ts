@@ -61,14 +61,12 @@ export class BikeUpdateRequestDto {
 
   @IsOptional()
   @IsArray()
-  @ArrayNotEmpty()
   @ValidateNested({ each: true })
   @Type(() => OffDaysUpdateDto)
   offDays?: OffDaysUpdateDto[];
 
   @IsOptional()
   @IsArray()
-  @ArrayNotEmpty()
   @ValidateNested({ each: true })
   @Type(() => BasePricesUpdateDto)
   basePrices?: BasePricesUpdateDto[];

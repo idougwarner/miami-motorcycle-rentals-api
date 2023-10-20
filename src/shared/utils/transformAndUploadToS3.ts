@@ -34,7 +34,7 @@ export async function transformAndUploadToS3(
     // Resize and upload each size to S3
     const uploadPromises = sizes.map(async (size) => {
       const resizedBuffer = await sharp(imageBuffer)
-        .resize(size.width, size.height, { fit: 'contain' })
+        .resize(size.width, null, { fit: 'contain' })
         .toBuffer();
       const fileSizeInBytes = resizedBuffer.byteLength;
       const fileSizeInKB = fileSizeInBytes / 1024;
